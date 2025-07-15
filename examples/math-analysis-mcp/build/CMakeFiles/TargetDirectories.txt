@@ -1,3 +1,0 @@
-/home/matthewlarson/Documents/iowarp_repos/scientific-mcps/math-analysis-mcp/build/CMakeFiles/math_analysis_server.dir
-/home/matthewlarson/Documents/iowarp_repos/scientific-mcps/math-analysis-mcp/build/CMakeFiles/edit_cache.dir
-/home/matthewlarson/Documents/iowarp_repos/scientific-mcps/math-analysis-mcp/build/CMakeFiles/rebuild_cache.dir

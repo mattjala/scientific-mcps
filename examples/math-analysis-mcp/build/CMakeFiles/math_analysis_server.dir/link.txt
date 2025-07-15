@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/math_analysis_server.dir/src/main.cpp.o CMakeFiles/math_analysis_server.dir/src/mcp_server.cpp.o CMakeFiles/math_analysis_server.dir/src/math_operations.cpp.o CMakeFiles/math_analysis_server.dir/src/json.cpp.o -o math_analysis_server  -lm 
