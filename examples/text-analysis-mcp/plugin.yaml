@@ -1,0 +1,3 @@
+name: text-analysis-mcp
+description: A text analysis plugin that provides natural language processing capabilities including sentiment analysis, text summarization, and keyword extraction using Python's NLTK library. This is an example plugin to demonstrate the PPI specification.
+server_path: src/text_analysis_mcp/server.py

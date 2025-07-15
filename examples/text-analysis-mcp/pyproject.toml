@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "text-analysis-mcp"
+version = "0.1.0"
+description = "Text analysis MCP server providing sentiment analysis, summarization, and keyword extraction"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+  { name = "IOWarp", email = "dev@iowarp.org" }
+]
+dependencies = [
+    "mcp[cli]>=1.2.0",
+    "python-dotenv>=1.0.1",
+    "fastmcp",
+    "nltk>=3.8",
+    "textstat>=0.7.0",
+    "collections-extended>=2.0.0"
+]
+
+[project.scripts]
+text-analysis-mcp = "server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

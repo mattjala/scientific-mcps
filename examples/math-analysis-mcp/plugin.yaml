@@ -1,0 +1,3 @@
+name: math-analysis-mcp
+description: A mathematical analysis plugin that provides statistical computations, linear algebra operations, and numerical analysis capabilities using C++. This plugin demonstrates cross-language MCP server implementation and extends IOWarp's capabilities with high-performance mathematical functions.
+server_path: build/math_analysis_server
