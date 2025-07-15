@@ -1,0 +1,26 @@
+tests:
+  - name: "hello_world"
+    description: "Basic test to verify AI agent responds with proper JSON format"
+    prompt: |
+      Please respond with valid JSON in exactly this format:
+      {
+        "message": "Hello, World!",
+        "status": "success",
+        "timestamp": "2024-01-01T00:00:00Z"
+      }
+      
+      Make sure the message field contains exactly "Hello, World!" and status is "success".
+    expected_schema:
+      type: "object"
+      required: ["message", "status", "timestamp"]
+      properties:
+        message:
+          type: "string"
+          enum: ["Hello, World!"]
+        status:
+          type: "string"
+          enum: ["success"]
+        timestamp:
+          type: "string"
+          pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    timeout: 30
