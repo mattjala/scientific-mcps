@@ -1,0 +1,3 @@
+name: Parallel_Sort
+description: Parallel sorting algorithms and log processing. Provides capabilities for sorting large datasets, filtering log files, pattern detection, and statistical analysis.
+server_path: src/parallel_sort/server.py

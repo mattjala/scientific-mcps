@@ -1,0 +1,3 @@
+name: Darshan
+description: I/O profiling and performance analysis using Darshan logs. Provides capabilities for parsing and analyzing I/O performance data from HPC applications.
+server_path: src/darshan_mcp/server.py

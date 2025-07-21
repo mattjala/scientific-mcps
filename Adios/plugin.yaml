@@ -1,0 +1,3 @@
+name: Adios
+description: Scientific data I/O using ADIOS2 framework. Provides capabilities for reading and inspecting BP5 format files, extracting variables, attributes, and metadata from scientific datasets.
+server_path: src/adiosmcp/server.py

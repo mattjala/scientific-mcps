@@ -1,0 +1,3 @@
+name: Compression
+description: File compression and data processing utilities. Provides capabilities for compressing files, processing CSV and Parquet data, and parallel sorting operations.
+server_path: src/server.py

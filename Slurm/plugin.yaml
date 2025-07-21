@@ -1,0 +1,3 @@
+name: Slurm
+description: Job scheduling and workload management using Slurm. Provides capabilities for job submission, monitoring, queue management, and cluster resource information.
+server_path: src/server.py

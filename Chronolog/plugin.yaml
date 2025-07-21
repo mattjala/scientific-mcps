@@ -1,0 +1,3 @@
+name: Chronolog
+description: Time-series data logging and archival system. Provides capabilities for recording, retrieving, and managing time-series data with HDF5 storage backend.
+server_path: src/chronomcp/server.py

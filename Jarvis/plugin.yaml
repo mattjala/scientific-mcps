@@ -1,0 +1,3 @@
+name: Jarvis
+description: Pipeline management and workflow orchestration system. Provides capabilities for managing and executing scientific computing pipelines and workflows.
+server_path: src/jarvis_mcp/server.py

@@ -1,0 +1,3 @@
+name: lmod
+description: Environment module management using Lmod. Provides capabilities for loading, unloading, and managing software modules in HPC environments.
+server_path: src/lmod_mcp/server.py

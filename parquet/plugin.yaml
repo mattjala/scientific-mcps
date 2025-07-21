@@ -1,0 +1,3 @@
+name: parquet
+description: Parquet format operations and columnar data processing. Provides capabilities for reading, writing, and processing Parquet files with PyArrow.
+server_path: src/server.py

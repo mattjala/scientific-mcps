@@ -1,0 +1,3 @@
+name: Arxiv
+description: Research paper search and retrieval from arXiv. Provides capabilities for searching papers by text, category, date, and retrieving detailed paper metadata and content.
+server_path: src/arxiv_mcp/server.py

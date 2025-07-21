@@ -1,0 +1,3 @@
+name: Node_Hardware
+description: System hardware monitoring and information gathering. Provides capabilities for querying CPU, memory, GPU, disk, network, and sensor information from compute nodes.
+server_path: src/node_hardware/server.py

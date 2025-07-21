@@ -1,0 +1,3 @@
+name: Plot
+description: Data visualization and plotting capabilities using Matplotlib. Provides capabilities for creating various types of plots, charts, and visualizations from scientific datasets.
+server_path: src/plot/server.py
