@@ -59,19 +59,19 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f pyproject.toml ]; then
-          uv sync --all-extras --dev "
+          uv sync --all-extras --dev 
         fi
-        uv add --dev ruff "
+        uv add --dev ruff || echo "Failed to add ruff, continuing..."
     
     - name: Run Ruff linter on ${{ matrix.mcp }}
       run: |
         cd mcps/${{ matrix.mcp }}
-        uv run ruff check --output-format=github . "
+        uv run ruff check --output-format=github . 
     
     - name: Run Ruff formatter check on ${{ matrix.mcp }}
       run: |
         cd mcps/${{ matrix.mcp }}
-        uv run ruff format --check ."
+        uv run ruff format --check . 
 
   mypy:
     name: MyPy - ${{ matrix.mcp }}
@@ -99,15 +99,15 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f pyproject.toml ]; then
-          uv sync --all-extras --dev "
+          uv sync --all-extras --dev
         fi
-        uv add --dev mypy "
+        uv add --dev mypy || echo "Failed to add mypy, continuing..."
     
     - name: Run MyPy on ${{ matrix.mcp }}
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -d src ]; then
-          uv run mypy src/ --ignore-missing-imports --show-error-codes --no-error-summary "
+          uv run mypy src/ --ignore-missing-imports --show-error-codes --no-error-summary 
         else
           echo "No src directory found for ${{ matrix.mcp }}"
         fi
@@ -138,15 +138,15 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f pyproject.toml ]; then
-          uv sync --all-extras --dev "
+          uv sync --all-extras --dev 
         fi
-        uv add --dev pytest pytest-cov "
+        uv add --dev pytest pytest-cov 
     
     - name: Run tests with coverage for ${{ matrix.mcp }}
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -d tests ]; then
-          uv run pytest tests/ -v --tb=short --cov=src --cov-report=xml --cov-report=html --cov-report=term "
+          uv run pytest tests/ -v --tb=short --cov=src --cov-report=xml --cov-report=html --cov-report=term 
         else
           echo "No tests directory found for ${{ matrix.mcp }}"
         fi
@@ -194,14 +194,14 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f pyproject.toml ]; then
-          uv sync --all-extras --dev "
+          uv sync --all-extras --dev 
         fi
     
     - name: Run dependency security audit
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f uv.lock ]; then
-          uv audit "
+          uv audit 
         else
           echo "No uv.lock file found for ${{ matrix.mcp }}"
         fi
@@ -210,14 +210,14 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f uv.lock ]; then
-          uv sync --locked "
+          uv sync --locked 
         fi
     
     - name: Run Bandit security scan
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -d src ]; then
-          uv run --with bandit bandit -r src/ -f json -o bandit-report.json "
+          uv run --with bandit bandit -r src/ -f json -o bandit-report.json 
         else
           echo "No src directory found for ${{ matrix.mcp }}"
         fi
@@ -256,15 +256,15 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f pyproject.toml ]; then
-          uv sync --all-extras --dev "
+          uv sync --all-extras --dev 
         fi
-        uv add --dev pytest "
+        uv add --dev pytest 
     
     - name: Run tests for ${{ matrix.mcp }}
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -d tests ]; then
-          uv run pytest tests/ --tb=short -v "
+          uv run pytest tests/ --tb=short -v 
         else
           echo "No tests directory for ${{ matrix.mcp }}"
         fi
@@ -295,15 +295,15 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f pyproject.toml ]; then
-          uv sync --all-extras --dev "
+          uv sync --all-extras --dev 
         fi
-        uv add --dev pytest."
+        uv add --dev pytest 
     
     - name: Run tests for ${{ matrix.mcp }}
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -d tests ]; then
-          uv run pytest tests/ --tb=short -v "
+          uv run pytest tests/ --tb=short -v 
         else
           echo "No tests directory for ${{ matrix.mcp }}"
         fi
@@ -334,15 +334,15 @@ jobs:
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -f pyproject.toml ]; then
-          uv sync --all-extras --dev "
+          uv sync --all-extras --dev 
         fi
-        uv add --dev pytest "
+        uv add --dev pytest 
     
     - name: Run tests for ${{ matrix.mcp }}
       run: |
         cd mcps/${{ matrix.mcp }}
         if [ -d tests ]; then
-          uv run pytest tests/ --tb=short -v "
+          uv run pytest tests/ --tb=short -v 
         else
           echo "No tests directory for ${{ matrix.mcp }}"
         fi
