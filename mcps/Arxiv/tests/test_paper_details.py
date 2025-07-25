@@ -154,11 +154,11 @@ class TestPaperDetails:
     @pytest.mark.asyncio
     async def test_paper_with_doi_and_journal_ref(self):
         """Test paper details with DOI and journal reference to cover lines 54, 61."""
-        
-        with patch('httpx.AsyncClient') as mock_client:
+
+        with patch("httpx.AsyncClient") as mock_client:
             # Mock response with DOI and journal reference
             mock_response = AsyncMock()
-            mock_response.content = b'''<?xml version="1.0" encoding="UTF-8"?>
+            mock_response.content = b"""<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
     <entry>
         <id>http://arxiv.org/abs/2301.12345v1</id>
@@ -171,15 +171,15 @@ class TestPaperDetails:
         <arxiv:doi>10.1000/test.doi</arxiv:doi>
         <arxiv:journal_ref>Test Journal 2023, vol. 1, pp. 1-10</arxiv:journal_ref>
     </entry>
-</feed>'''
+</feed>"""
             mock_response.raise_for_status = AsyncMock()
-            
+
             mock_session = AsyncMock()
             mock_session.get.return_value = mock_response
             mock_client.return_value.__aenter__.return_value = mock_session
-            
+
             result = await get_paper_details("2301.12345")
-            
+
             if result["success"]:
                 paper = result["paper"]
                 assert "doi" in paper
@@ -187,15 +187,15 @@ class TestPaperDetails:
                 assert paper["doi"] == "10.1000/test.doi"
                 assert "Test Journal" in paper["journal_ref"]
 
-    @pytest.mark.asyncio  
+    @pytest.mark.asyncio
     async def test_find_similar_papers_error_handling(self):
         """Test find_similar_papers error handling to cover line 99."""
-        
-        with patch('capabilities.paper_details.get_paper_details') as mock_get_details:
+
+        with patch("capabilities.paper_details.get_paper_details") as mock_get_details:
             # Mock get_paper_details to return failure
             mock_get_details.return_value = {"success": False}
-            
+
             with pytest.raises(Exception) as exc_info:
                 await find_similar_papers("invalid-id", 5)
-            
+
             assert "Could not retrieve reference paper details" in str(exc_info.value)
