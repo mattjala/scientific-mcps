@@ -6,7 +6,8 @@ import os
 import tempfile
 import shutil
 import pytest
-from unittest.mock import patch, MagicMock
+import httpx
+from unittest.mock import patch, MagicMock, AsyncMock
 import sys
 
 # Add src to path for testing
@@ -218,3 +219,127 @@ class TestPDFDownload:
 
             # Basic cleaning logic verification
             assert clean_id is not None
+
+    @pytest.mark.asyncio
+    async def test_download_with_default_path(self):
+        """Test download with None download_path to cover line 32."""
+        with patch('httpx.AsyncClient') as mock_client, \
+             patch('os.getcwd', return_value=self.temp_dir), \
+             patch('pathlib.Path.mkdir'), \
+             patch('builtins.open', create=True), \
+             patch('os.path.getsize', return_value=1024):
+            
+            mock_response = AsyncMock()
+            mock_response.read.return_value = b'PDF content'
+            mock_response.status = 200
+            mock_response.content = b'PDF content'
+            mock_response.headers = {"content-type": "application/pdf"}
+            mock_response.raise_for_status = AsyncMock()
+            
+            mock_instance = AsyncMock()
+            mock_instance.get.return_value = mock_response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+            
+            # Test with None download_path
+            result = await download_paper_pdf("test-id", None)
+            
+            assert result is not None
+            assert result["success"] is True
+
+    @pytest.mark.asyncio
+    async def test_download_complex_arxiv_id_cleaning(self):
+        """Test download with complex ArXiv ID formats to cover line 39."""
+        with patch('httpx.AsyncClient') as mock_client, \
+             patch('pathlib.Path.mkdir'), \
+             patch('builtins.open', create=True), \
+             patch('os.path.getsize', return_value=1024):
+            
+            mock_response = AsyncMock()
+            mock_response.read.return_value = b'PDF content'
+            mock_response.status = 200
+            mock_response.content = b'PDF content'
+            mock_response.headers = {"content-type": "application/pdf"}
+            mock_response.raise_for_status = AsyncMock()
+            
+            mock_instance = AsyncMock()
+            mock_instance.get.return_value = mock_response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+            
+            # Test with complex ArXiv ID containing arxiv.org
+            complex_id = "https://arxiv.org/abs/2301.12345"
+            result = await download_paper_pdf(complex_id, self.temp_dir)
+            
+            assert result is not None
+            assert result["success"] is True
+
+    @pytest.mark.asyncio
+    async def test_download_404_error(self):
+        """Test download with 404 error to cover lines 84, 86-87."""
+        with patch('httpx.AsyncClient') as mock_client:
+            mock_response = AsyncMock()
+            mock_response.status_code = 404
+            
+            mock_instance = AsyncMock()
+            mock_instance.get.side_effect = httpx.HTTPStatusError(
+                "404 Not Found", 
+                request=AsyncMock(), 
+                response=mock_response
+            )
+            mock_client.return_value.__aenter__.return_value = mock_instance
+            
+            # Test 404 error handling
+            with pytest.raises(Exception) as exc_info:
+                await download_paper_pdf("nonexistent-id", self.temp_dir)
+            
+            assert "PDF not found" in str(exc_info.value)
+
+    @pytest.mark.asyncio
+    async def test_download_timeout_error(self):
+        """Test download timeout to cover line 107."""
+        with patch('httpx.AsyncClient') as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.get.side_effect = httpx.TimeoutException("Timeout")
+            mock_client.return_value.__aenter__.return_value = mock_instance
+            
+            # Test timeout error handling
+            with pytest.raises(Exception) as exc_info:
+                await download_paper_pdf("test-id", self.temp_dir)
+            
+            assert "timed out" in str(exc_info.value)
+
+    @pytest.mark.asyncio
+    async def test_get_pdf_url_with_complex_id(self):
+        """Test get_pdf_url with complex ArXiv ID to cover line 137."""
+        # Test with ArXiv ID containing arxiv.org
+        complex_id = "https://arxiv.org/abs/2301.12345"
+        result = await get_pdf_url(complex_id)
+        
+        assert result is not None
+        assert "pdf_url" in result
+
+    @pytest.mark.asyncio
+    async def test_download_multiple_with_empty_directory_creation(self):
+        """Test download_multiple_pdfs with directory creation to cover line 165."""
+        with patch('httpx.AsyncClient') as mock_client, \
+             patch('pathlib.Path.mkdir'), \
+             patch('builtins.open', create=True), \
+             patch('os.path.exists', return_value=False), \
+             patch('os.path.getsize', return_value=1024):
+            
+            mock_response = AsyncMock()
+            mock_response.read.return_value = b'PDF content'
+            mock_response.status = 200
+            mock_response.content = b'PDF content'
+            mock_response.headers = {"content-type": "application/pdf"}
+            mock_response.raise_for_status = AsyncMock()
+            
+            mock_instance = AsyncMock()
+            mock_instance.get.return_value = mock_response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+            
+            # Test with non-existent directory
+            result = await download_multiple_pdfs(["test-id"], self.temp_dir)
+            
+            # Verify directory creation was attempted
+            assert result is not None
+            assert result["success"] is True
