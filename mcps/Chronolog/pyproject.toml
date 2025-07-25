@@ -41,5 +41,6 @@ build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [
+    "pip-audit>=2.9.0",
     "ruff>=0.12.5",
 ]
