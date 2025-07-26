@@ -231,6 +231,21 @@ def get_field_value(entry: Dict[str, Any], field: str) -> Any:
     Returns:
         Field value or empty string if field doesn't exist
     """
+    # Handle nested field access (e.g., "metadata.user")
+    if "." in field:
+        parts = field.split(".")
+        value = entry
+        for part in parts:
+            if isinstance(value, dict) and part in value:
+                value = value[part]
+            else:
+                return ""
+        return value
+
+    # Check if field exists directly in entry first
+    if field in entry:
+        return entry[field]
+
     field_mapping = {
         "timestamp": entry.get("timestamp"),
         "level": entry.get("level", ""),
@@ -292,16 +307,16 @@ def apply_operator(field_value: Any, operator: str, filter_value: Any) -> bool:
             return False
 
     elif operator == FilterOperator.GREATER_THAN.value:
-        return compare_values(field_value, filter_value, ">")
+        return compare_values(field_value, filter_value, "greater_than")
 
     elif operator == FilterOperator.LESS_THAN.value:
-        return compare_values(field_value, filter_value, "<")
+        return compare_values(field_value, filter_value, "less_than")
 
     elif operator == FilterOperator.BETWEEN.value:
         if isinstance(filter_value, list) and len(filter_value) == 2:
             return compare_values(
-                field_value, filter_value[0], ">="
-            ) and compare_values(field_value, filter_value[1], "<=")
+                field_value, filter_value[0], "greater_than_or_equal"
+            ) and compare_values(field_value, filter_value[1], "less_than_or_equal")
         return False
 
     elif operator == FilterOperator.IN.value:
@@ -312,7 +327,7 @@ def apply_operator(field_value: Any, operator: str, filter_value: Any) -> bool:
     elif operator == FilterOperator.NOT_IN.value:
         if isinstance(filter_value, list):
             return field_str not in [str(v).lower() for v in filter_value]
-        return True
+        return False
 
     return False
 
@@ -324,7 +339,7 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
     Args:
         field_value: Value from log entry
         filter_value: Value to compare against
-        operator: Comparison operator (>, <, >=, <=)
+        operator: Comparison operator (>, <, >=, <=, equals, less_than, greater_than, etc.)
 
     Returns:
         True if comparison is true, False otherwise
@@ -345,14 +360,16 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
             else:
                 filter_dt = filter_value
 
-            if operator == ">":
+            if operator in [">", "greater_than"]:
                 return field_value > filter_dt
-            elif operator == "<":
+            elif operator in ["<", "less_than"]:
                 return field_value < filter_dt
-            elif operator == ">=":
+            elif operator in [">=", "greater_than_or_equal"]:
                 return field_value >= filter_dt
-            elif operator == "<=":
+            elif operator in ["<=", "less_than_or_equal"]:
                 return field_value <= filter_dt
+            elif operator == "equals":
+                return field_value == filter_dt
 
         # Handle numeric comparison
         else:
@@ -360,27 +377,31 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
                 field_num = float(field_value)
                 filter_num = float(filter_value)
 
-                if operator == ">":
+                if operator in [">", "greater_than"]:
                     return field_num > filter_num
-                elif operator == "<":
+                elif operator in ["<", "less_than"]:
                     return field_num < filter_num
-                elif operator == ">=":
+                elif operator in [">=", "greater_than_or_equal"]:
                     return field_num >= filter_num
-                elif operator == "<=":
+                elif operator in ["<=", "less_than_or_equal"]:
                     return field_num <= filter_num
+                elif operator == "equals":
+                    return field_num == filter_num
             except (ValueError, TypeError):
                 # Fall back to string comparison
                 field_str = str(field_value)
                 filter_str = str(filter_value)
 
-                if operator == ">":
+                if operator in [">", "greater_than"]:
                     return field_str > filter_str
-                elif operator == "<":
+                elif operator in ["<", "less_than"]:
                     return field_str < filter_str
-                elif operator == ">=":
+                elif operator in [">=", "greater_than_or_equal"]:
                     return field_str >= filter_str
-                elif operator == "<=":
+                elif operator in ["<=", "less_than_or_equal"]:
                     return field_str <= filter_str
+                elif operator == "equals":
+                    return field_str == filter_str
 
     except Exception:
         return False
