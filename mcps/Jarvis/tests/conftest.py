@@ -1,6 +1,7 @@
 """
 Test configuration and fixtures for Jarvis MCP tests.
 """
+
 import pytest
 import tempfile
 import shutil
@@ -21,10 +22,10 @@ def temp_dir():
 @pytest.fixture
 def mock_jarvis_manager():
     """Mock JarvisManager instance."""
-    with patch('server.JarvisManager') as mock_manager_class:
+    with patch("server.JarvisManager") as mock_manager_class:
         mock_manager = Mock()
         mock_manager_class.get_instance.return_value = mock_manager
-        
+
         # Mock common methods
         mock_manager.create.return_value = None
         mock_manager.save.return_value = None
@@ -44,17 +45,17 @@ def mock_jarvis_manager():
         mock_manager.resource_graph_show.return_value = None
         mock_manager.resource_graph_build.return_value = None
         mock_manager.resource_graph_modify.return_value = None
-        
+
         yield mock_manager
 
 
 @pytest.fixture
 def mock_pipeline():
     """Mock Pipeline instance."""
-    with patch('capabilities.jarvis_handler.Pipeline') as mock_pipeline_class:
+    with patch("capabilities.jarvis_handler.Pipeline") as mock_pipeline_class:
         mock_pipeline = Mock()
         mock_pipeline_class.return_value = mock_pipeline
-        
+
         # Make methods chainable
         mock_pipeline.create.return_value = mock_pipeline
         mock_pipeline.load.return_value = mock_pipeline
@@ -67,15 +68,15 @@ def mock_pipeline():
         mock_pipeline.run.return_value = None
         mock_pipeline.destroy.return_value = None
         mock_pipeline.update.return_value = None
-        
+
         # Mock pipeline attributes
         mock_pipeline.global_id = "test_pipeline"
-        
+
         # Mock get_pkg method
         mock_pkg = Mock()
         mock_pkg.config = {"test_config": "test_value"}
         mock_pipeline.get_pkg.return_value = mock_pkg
-        
+
         yield mock_pipeline
 
 
@@ -86,12 +87,12 @@ def sample_pipeline_data():
         "pipeline_id": "test_pipeline",
         "packages": [
             {"pkg_type": "data_loader", "pkg_id": "loader1"},
-            {"pkg_type": "processor", "pkg_id": "proc1"}
+            {"pkg_type": "processor", "pkg_id": "proc1"},
         ],
         "config": {
             "environment": {"CMAKE_PREFIX_PATH": "/usr/local", "PATH": "/usr/bin"},
-            "settings": {"debug": True, "verbose": False}
-        }
+            "settings": {"debug": True, "verbose": False},
+        },
     }
 
 
@@ -105,15 +106,15 @@ def sample_package_config():
             "input_path": "/data/input",
             "output_path": "/data/output",
             "batch_size": 100,
-            "parallel": True
-        }
+            "parallel": True,
+        },
     }
 
 
-@pytest.fixture 
+@pytest.fixture
 def mock_fastmcp():
     """Mock FastMCP instance."""
-    with patch('server.FastMCP') as mock_mcp_class:
+    with patch("server.FastMCP") as mock_mcp_class:
         mock_mcp = Mock(spec=FastMCP)
         mock_mcp_class.return_value = mock_mcp
         yield mock_mcp
@@ -123,11 +124,11 @@ def mock_fastmcp():
 def mock_environment_vars():
     """Mock environment variables for testing."""
     env_vars = {
-        'MCP_TRANSPORT': 'stdio',
-        'MCP_SSE_HOST': '127.0.0.1',
-        'MCP_SSE_PORT': '8000'
+        "MCP_TRANSPORT": "stdio",
+        "MCP_SSE_HOST": "127.0.0.1",
+        "MCP_SSE_PORT": "8000",
     }
-    
+
     with patch.dict(os.environ, env_vars):
         yield env_vars
 
@@ -141,22 +142,22 @@ def error_scenarios():
         "configuration_error": Exception("Invalid configuration provided"),
         "permission_error": PermissionError("Access denied"),
         "connection_error": ConnectionError("Failed to connect to service"),
-        "timeout_error": TimeoutError("Operation timed out")
+        "timeout_error": TimeoutError("Operation timed out"),
     }
 
 
 class MockAsyncContext:
     """Helper class for async context management in tests."""
-    
+
     def __init__(self, return_value=None, exception=None):
         self.return_value = return_value
         self.exception = exception
-    
+
     async def __aenter__(self):
         if self.exception:
             raise self.exception
         return self.return_value
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         return False
 
@@ -172,6 +173,6 @@ def create_mock_response(status: str, data: Dict[str, Any] = None) -> Dict[str, 
 @pytest.fixture
 def mock_dotenv():
     """Mock dotenv loading."""
-    with patch('server.load_dotenv') as mock_load:
+    with patch("server.load_dotenv") as mock_load:
         mock_load.return_value = True
         yield mock_load
