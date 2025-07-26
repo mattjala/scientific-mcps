@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Plot MCP Server with comprehensive data visualization capabilities.
-Provides plotting functionality for CSV, Excel, and other data formats using pandas and matplotlib.
+Provides plotting functionality for CSV, Excel, and other data formats using
+pandas and matplotlib.
 """
 
 import os
