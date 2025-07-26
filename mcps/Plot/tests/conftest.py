@@ -26,6 +26,11 @@ def suppress_warnings():
     warnings.filterwarnings("ignore", message=".*mode.*parameter.*deprecated.*")
     warnings.filterwarnings("ignore", message=".*Matplotlib.*")
 
+    # Suppress jupyter client deprecation warning
+    warnings.filterwarnings(
+        "ignore", message="Jupyter is migrating its paths", category=DeprecationWarning
+    )
+
     # Suppress any other common warnings
     warnings.filterwarnings("ignore", category=ResourceWarning)
     warnings.filterwarnings("ignore", category=RuntimeWarning)
@@ -39,3 +44,6 @@ def pytest_configure(config):
     warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
     warnings.filterwarnings("ignore", message=".*mode.*parameter.*deprecated.*")
     warnings.filterwarnings("ignore", message=".*Matplotlib.*")
+    warnings.filterwarnings(
+        "ignore", message="Jupyter is migrating its paths", category=DeprecationWarning
+    )
