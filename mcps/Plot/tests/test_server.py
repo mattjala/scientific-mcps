@@ -207,7 +207,7 @@ class TestServer:
                 text=True,
                 timeout=5,  # Increased timeout for GitHub Actions
             )
-            
+
             # Should exit with error code
             assert result.returncode != 0
             assert (
@@ -218,7 +218,9 @@ class TestServer:
         except subprocess.TimeoutExpired:
             # If it times out, that means argument parsing might not be reached
             # This is acceptable as the server is designed for long-running processes
-            pytest.skip("Server hangs with invalid arguments - expected behavior for MCP servers")
+            pytest.skip(
+                "Server hangs with invalid arguments - expected behavior for MCP servers"
+            )
 
     @pytest.mark.asyncio
     async def test_data_info_tool_execution(self, sample_csv_file):
