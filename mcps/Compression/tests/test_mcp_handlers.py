@@ -1,6 +1,9 @@
 import pytest
 import os
 import tempfile
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 from mcp_handlers import compress_file_handler
 
 
@@ -34,3 +37,19 @@ async def test_compress_file_handler_error():
     assert result["_meta"]["tool"] == "compress_file"
     assert "error" in result["_meta"]
     assert "File not found" in result["content"][0]["text"]
+
+
+@pytest.mark.asyncio
+async def test_compress_file_handler_exception_details():
+    """Test that handler captures exception type and JSON formatting"""
+    result = await compress_file_handler("nonexistent_file.txt")
+
+    # Verify the exception type is captured
+    assert result["_meta"]["error"] == "Exception"
+
+    # Verify the content is proper JSON
+    import json
+
+    error_data = json.loads(result["content"][0]["text"])
+    assert "error" in error_data
+    assert isinstance(error_data["error"], str)
