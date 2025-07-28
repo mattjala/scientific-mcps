@@ -30,7 +30,6 @@ dev = [
     "mypy>=1.17.0",
     "pytest>=8.0.0",
     "pytest-cov>=6.2.1",
-    "pytest-asyncio>=0.24.0",
     "ruff>=0.12.5",
 ]
 
@@ -40,7 +39,3 @@ adios-mcp = "server:main"
 [build-system]
 requires = ["setuptools>=64.0", "wheel"]
 build-backend = "setuptools.build_meta"
-
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-testpaths = ["tests"]

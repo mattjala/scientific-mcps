@@ -307,16 +307,16 @@ def apply_operator(field_value: Any, operator: str, filter_value: Any) -> bool:
             return False
 
     elif operator == FilterOperator.GREATER_THAN.value:
-        return compare_values(field_value, filter_value, "greater_than")
+        return compare_values(field_value, filter_value, ">")
 
     elif operator == FilterOperator.LESS_THAN.value:
-        return compare_values(field_value, filter_value, "less_than")
+        return compare_values(field_value, filter_value, "<")
 
     elif operator == FilterOperator.BETWEEN.value:
         if isinstance(filter_value, list) and len(filter_value) == 2:
             return compare_values(
-                field_value, filter_value[0], "greater_than_or_equal"
-            ) and compare_values(field_value, filter_value[1], "less_than_or_equal")
+                field_value, filter_value[0], ">="
+            ) and compare_values(field_value, filter_value[1], "<=")
         return False
 
     elif operator == FilterOperator.IN.value:
@@ -327,7 +327,7 @@ def apply_operator(field_value: Any, operator: str, filter_value: Any) -> bool:
     elif operator == FilterOperator.NOT_IN.value:
         if isinstance(filter_value, list):
             return field_str not in [str(v).lower() for v in filter_value]
-        return False
+        return True
 
     return False
 
@@ -339,7 +339,7 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
     Args:
         field_value: Value from log entry
         filter_value: Value to compare against
-        operator: Comparison operator (>, <, >=, <=, equals, less_than, greater_than, etc.)
+        operator: Comparison operator (>, <, >=, <=)
 
     Returns:
         True if comparison is true, False otherwise
@@ -360,7 +360,7 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
             else:
                 filter_dt = filter_value
 
-            if operator in [">", "greater_than"]:
+            if operator == ">":
                 return field_value > filter_dt
             elif operator in ["<", "less_than"]:
                 return field_value < filter_dt
@@ -368,8 +368,6 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
                 return field_value >= filter_dt
             elif operator in ["<=", "less_than_or_equal"]:
                 return field_value <= filter_dt
-            elif operator == "equals":
-                return field_value == filter_dt
 
         # Handle numeric comparison
         else:
@@ -377,7 +375,7 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
                 field_num = float(field_value)
                 filter_num = float(filter_value)
 
-                if operator in [">", "greater_than"]:
+                if operator == ">":
                     return field_num > filter_num
                 elif operator in ["<", "less_than"]:
                     return field_num < filter_num
@@ -392,7 +390,7 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
                 field_str = str(field_value)
                 filter_str = str(filter_value)
 
-                if operator in [">", "greater_than"]:
+                if operator == ">":
                     return field_str > filter_str
                 elif operator in ["<", "less_than"]:
                     return field_str < filter_str
@@ -400,8 +398,6 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
                     return field_str >= filter_str
                 elif operator in ["<=", "less_than_or_equal"]:
                     return field_str <= filter_str
-                elif operator == "equals":
-                    return field_str == filter_str
 
     except Exception:
         return False
