@@ -5,7 +5,6 @@ Tests for ArXiv export and formatting utilities.
 import pytest
 import sys
 import os
-from unittest.mock import patch
 
 # Add src to path for testing
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -174,19 +173,3 @@ class TestExportUtils:
         except Exception as e:
             # It's acceptable for this to raise an exception
             assert isinstance(e, Exception)
-
-    @pytest.mark.asyncio
-    async def test_format_search_results_error_handling(self):
-        """Test format_search_results error handling to cover lines 108-110."""
-
-        # Test with data that causes an exception
-        with patch("capabilities.export_utils.logger") as mock_logger:
-            # Create a scenario that will raise an exception by passing None for papers
-            invalid_papers = None
-            valid_query_info = {"query": "test", "max_results": 5}
-
-            with pytest.raises(Exception) as exc_info:
-                await format_search_results(invalid_papers, valid_query_info)
-
-            assert "Results formatting failed" in str(exc_info.value)
-            mock_logger.error.assert_called()

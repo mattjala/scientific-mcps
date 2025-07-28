@@ -13,7 +13,8 @@ keywords = ["MCP", "Slurm", "HPC", "job-management", "cluster-monitoring", "work
 
 dependencies = [
     "fastmcp",
-    "python-dotenv>=1.0.0"
+    "psutil>=7.0.0",
+    "python-dotenv>=1.0.0",
 ]
 
 [dependency-groups]
@@ -28,7 +29,7 @@ dev = [
 ]
 
 [project.scripts]
-slurm-mcp = "src.server:main"
+slurm-mcp = "server:main"
 
 [build-system]
 requires = ["setuptools>=64.0", "wheel"]
