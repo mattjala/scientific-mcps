@@ -25,6 +25,7 @@ dev = [
     "pytest-cov>=6.2.1",
     "pytest-timeout>=2.4.0",
     "types-psutil",
+    "ruff>=0.12.5",
 ]
 
 [project.scripts]
