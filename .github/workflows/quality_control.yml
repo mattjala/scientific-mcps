@@ -61,7 +61,7 @@ jobs:
         if [ -f pyproject.toml ]; then
           uv sync --all-extras --dev 
         fi
-        uv add --dev ruff"
+        uv add --dev ruff
     
     - name: Run Ruff linter on ${{ matrix.mcp }}
       run: |
@@ -101,7 +101,7 @@ jobs:
         if [ -f pyproject.toml ]; then
           uv sync --all-extras --dev
         fi
-        uv add --dev mypy "
+        uv add --dev mypy 
     
     - name: Run MyPy on ${{ matrix.mcp }}
       run: |
@@ -196,7 +196,7 @@ jobs:
         if [ -f pyproject.toml ]; then
           uv sync --all-extras --dev
         fi
-        uv add --dev pip-audit"
+        uv add --dev pip-audit
     
     - name: Run security audit for ${{ matrix.mcp }}
       run: |
