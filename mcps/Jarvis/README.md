@@ -3,7 +3,7 @@
 
 ## Description
 
-**Jarvis MCP** manages data-centric pipeline lifecycles using the Jarvis framework, featuring pipeline creation, package management, configuration updates, environment building, and execution capabilities for high-performance computing and data science.
+Jarvis MCP is a Model Context Protocol server that enables LLMs to manage the full lifecycle of data-centric pipelines using the Jarvis framework, featuring pipeline creation, package management, configuration updates, environment building, and execution capabilities for high-performance computing and data science workflows.
 
 ## 🛠️ Installation
 
