@@ -1,6 +1,9 @@
 import pytest
 import os
 import tempfile
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 from server import mcp
 
 

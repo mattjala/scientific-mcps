@@ -5,6 +5,8 @@ Covers:
  - list_resources() returning correct resource count
  - call_tool dispatch for filter_csv, list_hdf5, node_hardware
  - Unknown‑tool error handling
+ - Error handling paths and exception cases
+ - Async handler functions
 """
 
 import os

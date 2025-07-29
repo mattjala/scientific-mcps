@@ -1,5 +1,5 @@
 """
-Tests for the filter handler capability.
+Tests for filter handler functionality.
 """
 
 import pytest
@@ -16,6 +16,33 @@ from implementation.filter_handler import (
 
 class TestFilterHandler:
     """Test suite for filter handler functionality."""
+
+    @pytest.fixture
+    def sample_log_content(self):
+        """Create sample log content for testing."""
+        return """2024-01-01 08:00:00 INFO First entry
+2024-01-01 09:00:00 ERROR Second entry
+2024-01-01 10:00:00 WARN Third entry
+2024-01-02 08:00:00 DEBUG Fourth entry
+2024-01-02 09:00:00 INFO Fifth entry
+2024-01-02 10:00:00 ERROR Connection failed
+2024-01-02 11:00:00 WARN Timeout occurred"""
+
+    @pytest.fixture
+    def complex_log_content(self):
+        """Create complex log content for testing advanced filtering."""
+        return """2024-01-01 08:00:00 INFO User login successful
+2024-01-01 08:15:00 ERROR Database connection failed
+2024-01-01 08:30:00 WARN High memory usage detected
+2024-01-01 09:00:00 DEBUG Processing request ID 12345
+2024-01-01 09:15:00 ERROR Authentication failed for user admin
+2024-01-01 09:30:00 INFO Backup completed successfully
+2024-01-01 10:00:00 ERROR Network timeout after 30 seconds
+2024-01-01 10:15:00 WARN Disk space low: 5% remaining
+2024-01-01 10:30:00 DEBUG Cache miss for key user_preferences
+2024-01-01 11:00:00 ERROR Service unavailable: maintenance mode
+2024-01-01 11:15:00 INFO System restart scheduled
+2024-01-01 11:30:00 WARN Performance degradation detected"""
 
     @pytest.mark.asyncio
     async def test_filter_by_log_level_include(self):
@@ -70,7 +97,7 @@ class TestFilterHandler:
             os.unlink(temp_path)
 
     @pytest.mark.asyncio
-    async def test_filter_by_keyword_single(self):
+    async def test_filter_by_keyword_single(self, sample_log_content):
         """Test filtering by single keyword."""
         test_content = """2024-01-01 08:30:00 INFO User login successful
 2024-01-01 09:15:00 INFO Database connection established
@@ -96,7 +123,7 @@ class TestFilterHandler:
             os.unlink(temp_path)
 
     @pytest.mark.asyncio
-    async def test_filter_by_keyword_multiple_or(self):
+    async def test_filter_by_keyword_multiple_or(self, sample_log_content):
         """Test filtering by multiple keywords with OR logic."""
         test_content = """2024-01-01 08:30:00 INFO User login successful
 2024-01-01 09:15:00 INFO Database connection established
@@ -108,6 +135,7 @@ class TestFilterHandler:
             temp_path = f.name
 
         try:
+            # Test with keywords that should be found
             result = await filter_by_keyword(
                 temp_path, ["login", "database"], case_sensitive=False, match_all=False
             )
@@ -118,7 +146,7 @@ class TestFilterHandler:
             os.unlink(temp_path)
 
     @pytest.mark.asyncio
-    async def test_filter_by_keyword_multiple_and(self):
+    async def test_filter_by_keyword_multiple_and(self, sample_log_content):
         """Test filtering by multiple keywords with AND logic."""
         test_content = """2024-01-01 08:30:00 INFO User login database access
 2024-01-01 09:15:00 INFO Database connection established
@@ -130,6 +158,7 @@ class TestFilterHandler:
             temp_path = f.name
 
         try:
+            # Test with keywords that should be found together
             result = await filter_by_keyword(
                 temp_path, ["login", "database"], case_sensitive=False, match_all=True
             )
@@ -144,7 +173,7 @@ class TestFilterHandler:
             os.unlink(temp_path)
 
     @pytest.mark.asyncio
-    async def test_filter_by_time_range(self):
+    async def test_filter_by_time_range(self, sample_log_content):
         """Test filtering by time range."""
         test_content = """2024-01-01 08:30:00 INFO Early message
 2024-01-01 09:15:00 INFO Target message 1
@@ -296,7 +325,7 @@ class TestFilterHandler:
         assert "not found" in result["error"].lower()
 
     @pytest.mark.asyncio
-    async def test_filter_invalid_entries(self):
+    async def test_filter_invalid_entries(self, sample_log_content):
         """Test filtering with invalid log entries."""
         test_content = """2024-01-01 08:30:00 INFO Valid entry
 Invalid line without timestamp

@@ -310,7 +310,7 @@ async def spider_search(pattern: Optional[str] = None) -> Dict[str, Any]:
             # Extract module name and versions
             if ":" in line:
                 name, versions = line.split(":", 1)
-                modules[name.strip()] = versions.strip().split(",")
+                modules[name.strip()] = [v.strip() for v in versions.strip().split(",")]
             else:
                 modules[line] = []
 
@@ -386,10 +386,11 @@ async def list_saved_collections() -> Dict[str, Any]:
             and not line.startswith("Named collection")
             and not line.startswith("No named")
         ):
-            # Extract collection name (usually follows a pattern like "1) name")
-            match = re.search(r"\d+\)\s*(.+)", line)
-            if match:
-                collections.append(match.group(1))
+            # Extract collection names (patterns like "1) name   2) name2   3) name3")
+            matches = re.findall(r"\d+\)\s*([^\d\)]+?)(?=\s*\d+\)|$)", line)
+            if matches:
+                for match in matches:
+                    collections.append(match.strip())
             elif line and not any(char in line for char in [":", "(", ")"]):
                 collections.append(line)
 

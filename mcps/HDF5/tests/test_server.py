@@ -1,10 +1,11 @@
 """
-Integration tests for FastAPI MCP server endpoints.
+Unit tests for server module.
 
 Covers:
- - mcp/listResources endpoint
- - mcp/callTool for filter_csv, list_hdf5, and node_hardware
- - Unknown‑tool endpoint error
+ - FastMCP server initialization and tool registration
+ - Tool function wrappers (list_hdf5_tool, inspect_hdf5_tool, etc.)
+ - Error handling in tool functions
+ - Main function with different transport modes
 """
 
 import os

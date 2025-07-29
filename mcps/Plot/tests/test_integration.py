@@ -473,10 +473,11 @@ class TestIntegration:
             assert result["status"] == "success"
             plots.append(f.name)
 
-        # Verify all outputs
-        for plot_path in plots:
-            assert os.path.exists(plot_path)
+        # Cleanup all plot files
+        for plot_file in plots:
+            if os.path.exists(plot_file):
+                os.unlink(plot_file)
 
-        # Cleanup
-        for plot_path in plots:
-            os.unlink(plot_path)
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

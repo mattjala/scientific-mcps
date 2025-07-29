@@ -8,18 +8,7 @@ import os
 # Add the src directory to the path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from server import (
-    module_list_tool,
-    module_avail_tool,
-    module_show_tool,
-    module_load_tool,
-    module_unload_tool,
-    module_swap_tool,
-    module_spider_tool,
-    module_save_tool,
-    module_restore_tool,
-    module_savelist_tool,
-)
+import server
 
 
 @pytest.mark.asyncio
@@ -36,7 +25,7 @@ async def test_module_list_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_list_tool()
+        result = await server.module_list_tool.fn()
 
         assert result == mock_result
         mock_handler.assert_called_once()
@@ -57,7 +46,7 @@ async def test_module_avail_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_avail_tool(pattern="python")
+        result = await server.module_avail_tool.fn(pattern="python")
 
         assert result == mock_result
         mock_handler.assert_called_once_with("python")
@@ -82,7 +71,7 @@ async def test_module_show_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_show_tool("python/3.9.0")
+        result = await server.module_show_tool.fn("python/3.9.0")
 
         assert result == mock_result
         mock_handler.assert_called_once_with("python/3.9.0")
@@ -112,7 +101,7 @@ async def test_module_load_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_load_tool(["gcc/11.2.0", "python/3.9.0"])
+        result = await server.module_load_tool.fn(["gcc/11.2.0", "python/3.9.0"])
 
         assert result == mock_result
         mock_handler.assert_called_once_with(["gcc/11.2.0", "python/3.9.0"])
@@ -137,7 +126,7 @@ async def test_module_unload_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_unload_tool(["python/3.9.0"])
+        result = await server.module_unload_tool.fn(["python/3.9.0"])
 
         assert result == mock_result
         mock_handler.assert_called_once_with(["python/3.9.0"])
@@ -158,7 +147,7 @@ async def test_module_swap_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_swap_tool("gcc/10.2.0", "gcc/11.2.0")
+        result = await server.module_swap_tool.fn("gcc/10.2.0", "gcc/11.2.0")
 
         assert result == mock_result
         mock_handler.assert_called_once_with("gcc/10.2.0", "gcc/11.2.0")
@@ -181,7 +170,7 @@ async def test_module_spider_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_spider_tool()
+        result = await server.module_spider_tool.fn(pattern=None)
 
         assert result == mock_result
         mock_handler.assert_called_once_with(None)
@@ -201,7 +190,7 @@ async def test_module_save_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_save_tool("my_env")
+        result = await server.module_save_tool.fn("my_env")
 
         assert result == mock_result
         mock_handler.assert_called_once_with("my_env")
@@ -222,7 +211,7 @@ async def test_module_restore_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_restore_tool("my_env")
+        result = await server.module_restore_tool.fn("my_env")
 
         assert result == mock_result
         mock_handler.assert_called_once_with("my_env")
@@ -242,7 +231,30 @@ async def test_module_savelist_tool():
     ) as mock_handler:
         mock_handler.return_value = mock_result
 
-        result = await module_savelist_tool()
+        result = await server.module_savelist_tool.fn()
 
         assert result == mock_result
         mock_handler.assert_called_once()
+
+
+def test_main_function():
+    """Test the main function entry point."""
+    with (
+        patch("asyncio.run") as mock_run,
+        patch.object(server.mcp, "run") as mock_mcp_run,
+    ):
+        server.main()
+
+        mock_run.assert_called_once_with(mock_mcp_run.return_value)
+
+
+def test_main_module_execution():
+    """Test __main__ module execution."""
+    with patch("server.main") as mock_main:
+        # Simulate running the module directly
+        exec(
+            "if __name__ == '__main__': main()",
+            {"__name__": "__main__", "main": mock_main},
+        )
+
+        mock_main.assert_called_once()

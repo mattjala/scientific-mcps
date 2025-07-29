@@ -11,8 +11,15 @@ from mcp_handlers import sort_log_handler
 class TestMCPHandlers:
     """Test suite for MCP handler functionality."""
 
+    @pytest.fixture
+    def sample_log_content(self):
+        """Create sample log content for testing."""
+        return """2024-01-02 10:00:00 INFO Second entry
+2024-01-01 08:30:00 DEBUG First entry
+2024-01-01 09:00:00 ERROR Third entry"""
+
     @pytest.mark.asyncio
-    async def test_sort_log_handler_success(self):
+    async def test_sort_log_handler_success(self, sample_log_content):
         """Test successful log sorting through MCP handler."""
         test_content = """2024-01-02 10:00:00 INFO Second entry
 2024-01-01 08:30:00 DEBUG First entry"""

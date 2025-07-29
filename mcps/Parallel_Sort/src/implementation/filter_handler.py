@@ -231,6 +231,21 @@ def get_field_value(entry: Dict[str, Any], field: str) -> Any:
     Returns:
         Field value or empty string if field doesn't exist
     """
+    # Handle nested field access (e.g., "metadata.user")
+    if "." in field:
+        parts = field.split(".")
+        value = entry
+        for part in parts:
+            if isinstance(value, dict) and part in value:
+                value = value[part]
+            else:
+                return ""
+        return value
+
+    # Check if field exists directly in entry first
+    if field in entry:
+        return entry[field]
+
     field_mapping = {
         "timestamp": entry.get("timestamp"),
         "level": entry.get("level", ""),
@@ -347,11 +362,11 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
 
             if operator == ">":
                 return field_value > filter_dt
-            elif operator == "<":
+            elif operator in ["<", "less_than"]:
                 return field_value < filter_dt
-            elif operator == ">=":
+            elif operator in [">=", "greater_than_or_equal"]:
                 return field_value >= filter_dt
-            elif operator == "<=":
+            elif operator in ["<=", "less_than_or_equal"]:
                 return field_value <= filter_dt
 
         # Handle numeric comparison
@@ -362,12 +377,14 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
 
                 if operator == ">":
                     return field_num > filter_num
-                elif operator == "<":
+                elif operator in ["<", "less_than"]:
                     return field_num < filter_num
-                elif operator == ">=":
+                elif operator in [">=", "greater_than_or_equal"]:
                     return field_num >= filter_num
-                elif operator == "<=":
+                elif operator in ["<=", "less_than_or_equal"]:
                     return field_num <= filter_num
+                elif operator == "equals":
+                    return field_num == filter_num
             except (ValueError, TypeError):
                 # Fall back to string comparison
                 field_str = str(field_value)
@@ -375,11 +392,11 @@ def compare_values(field_value: Any, filter_value: Any, operator: str) -> bool:
 
                 if operator == ">":
                     return field_str > filter_str
-                elif operator == "<":
+                elif operator in ["<", "less_than"]:
                     return field_str < filter_str
-                elif operator == ">=":
+                elif operator in [">=", "greater_than_or_equal"]:
                     return field_str >= filter_str
-                elif operator == "<=":
+                elif operator in ["<=", "less_than_or_equal"]:
                     return field_str <= filter_str
 
     except Exception:
