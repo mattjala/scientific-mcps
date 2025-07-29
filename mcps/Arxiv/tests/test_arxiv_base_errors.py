@@ -319,7 +319,7 @@ class TestArxivBaseErrors:
         # Test completely invalid XML
         mock_response = AsyncMock()
         mock_response.text.return_value = "Not XML at all"
-        mock_response.raise_for_status.return_value = None
+        mock_response.raise_for_status = Mock()
 
         mock_client_instance = AsyncMock()
         mock_client_instance.get.return_value = mock_response
@@ -346,7 +346,7 @@ class TestArxivBaseErrors:
 
         mock_response = AsyncMock()
         mock_response.text.return_value = truncated_xml
-        mock_response.raise_for_status.return_value = None
+        mock_response.raise_for_status = Mock()
 
         mock_client_instance = AsyncMock()
         mock_client_instance.get.return_value = mock_response
@@ -365,7 +365,7 @@ class TestArxivBaseErrors:
         # Test completely empty response
         mock_response = AsyncMock()
         mock_response.text.return_value = ""
-        mock_response.raise_for_status.return_value = None
+        mock_response.raise_for_status = Mock()
 
         mock_client_instance = AsyncMock()
         mock_client_instance.get.return_value = mock_response
@@ -465,7 +465,7 @@ class TestArxivBaseErrors:
         with patch("capabilities.arxiv_base.httpx.AsyncClient") as mock_client:
             mock_response = AsyncMock()
             mock_response.content = b'<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"></feed>'
-            mock_response.raise_for_status = AsyncMock()
+            mock_response.raise_for_status = Mock()
 
             mock_client_instance = AsyncMock()
             mock_client_instance.get.return_value = mock_response
