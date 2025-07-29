@@ -5,7 +5,6 @@ Tests for filter handler functionality.
 import pytest
 import tempfile
 import os
-from datetime import datetime
 from implementation.filter_handler import (
     filter_logs,
     filter_by_time_range,

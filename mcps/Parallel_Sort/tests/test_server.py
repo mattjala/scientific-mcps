@@ -2,12 +2,14 @@
 Tests for the Parallel Sort MCP server.
 """
 
+import os
 import sys
+import pytest
 
 # Add the src directory to the path for testing
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from server import main, mcp
+from server import mcp
 
 
 class TestServer:

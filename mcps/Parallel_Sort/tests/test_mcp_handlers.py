@@ -5,21 +5,7 @@ Tests for MCP handlers.
 import pytest
 import tempfile
 import os
-from mcp_handlers import (
-    sort_log_handler,
-    parallel_sort_handler,
-    analyze_statistics_handler,
-    detect_patterns_handler,
-    filter_logs_handler,
-    filter_time_range_handler,
-    filter_level_handler,
-    filter_keyword_handler,
-    filter_preset_handler,
-    export_json_handler,
-    export_csv_handler,
-    export_text_handler,
-    summary_report_handler,
-)
+from mcp_handlers import sort_log_handler
 
 
 class TestMCPHandlers:
