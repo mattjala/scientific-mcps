@@ -232,7 +232,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Arxiv run arxiv-mcp --help
 
 **Parameters**:
 - `arxiv_ids_json` (str): Parameter for arxiv_ids_json
-- `download_path` (str, optional): Parameter for download_path
+- `download_path` (Any, optional): Parameter for download_path
 - `max_concurrent` (int, optional): Parameter for max_concurrent (default: 3)
 
 **Returns**: Dictionary with download results
