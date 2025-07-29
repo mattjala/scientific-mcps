@@ -1,10 +1,18 @@
 # IoWarp MCPs
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![IoWarp](https://img.shields.io/badge/IoWarp-GitHub-blue.svg)](http://github.com/iowarp)
-[![GRC](https://img.shields.io/badge/GRC-Website-blue.svg)](https://grc.iit.edu/)
-[![MCP](https://img.shields.io/badge/MCP-Protocol-purple.svg)](https://modelcontextprotocol.io/)
-[![PyPI](https://img.shields.io/badge/PyPI-Package-green.svg)](https://pypi.org/project/iowarp-mcps/)
+[![PyPI version](https://img.shields.io/pypi/v/iowarp-mcps.svg)](https://pypi.org/project/iowarp-mcps/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+[![CI](https://github.com/iowarp/iowarp-mcps/actions/workflows/quality_control.yml/badge.svg)](https://github.com/iowarp/iowarp-mcps/actions/workflows/quality_control.yml)
+[![Coverage](https://codecov.io/gh/iowarp/iowarp-mcps/branch/main/graph/badge.svg)](https://codecov.io/gh/iowarp/iowarp-mcps)
+
+[![Tests](https://img.shields.io/badge/Tests-14%20MCP%20Packages-blue)](https://github.com/iowarp/iowarp-mcps/actions/workflows/test-mcps.yml)
+[![WRP Framework](https://img.shields.io/badge/WRP-AI%20Testing%20Framework-blue)](https://github.com/iowarp/iowarp-mcps/actions/workflows/wrp-tests.yml)
+
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![MyPy](https://img.shields.io/badge/mypy-checked-blue)](http://mypy-lang.org/)
+[![uv](https://img.shields.io/badge/uv-managed-orange)](https://github.com/astral-sh/uv)
+[![pip-audit](https://img.shields.io/badge/security-pip--audit-green)](https://pypi.org/project/pip-audit/)
 
 Collection of MCP servers specifically designed for scientific computing research that enable AI agents and LLMs to interact with data analysis tools, HPC resources, and research datasets through a standardized protocol.
 
