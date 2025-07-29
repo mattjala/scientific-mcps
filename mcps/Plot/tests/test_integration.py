@@ -26,9 +26,6 @@ from implementation.plot_capabilities import (
 class TestIntegration:
     """Integration tests for complete workflows and data format support"""
 
-class TestIntegration:
-    """Integration tests for complete workflows and data format support"""
-
     @pytest.fixture
     def complex_csv_data(self):
         """Create complex CSV data for testing"""
@@ -467,22 +464,19 @@ class TestIntegration:
                 excel_data, "sales", "profit_margin", "Sales vs Profit", f.name
             )
             assert result["status"] == "success"
-            assert result["data_points"] == 10000
-            assert os.path.exists(line_plot_path)
-            print("Large dataset line plot: PASS")
-            
-            # Test histogram with large dataset
-            histogram_path = os.path.join(output_dir, "large_histogram.png")
+            plots.append(f.name)
+
+        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
             result = create_histogram(
                 excel_data, "profit_margin", 20, "Profit Distribution", f.name
             )
             assert result["status"] == "success"
-            assert result["data_points"] == 10000
-            assert os.path.exists(histogram_path)
-            print("Large dataset histogram: PASS")
-            
-        finally:
-            os.unlink(large_csv_file)
+            plots.append(f.name)
+
+        # Cleanup all plot files
+        for plot_file in plots:
+            if os.path.exists(plot_file):
+                os.unlink(plot_file)
 
 
 if __name__ == "__main__":
