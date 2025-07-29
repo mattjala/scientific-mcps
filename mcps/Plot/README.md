@@ -110,72 +110,70 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Plot run plot-mcp --help
 ## Capabilities
 
 ### `line_plot`
-**Description**: Create professional line plots from CSV and Excel data with intelligent data processing and customization. Supports time-series analysis, trend visualization, and multi-variable plotting with automatic formatting and statistical insights.
+**Description**: Create a line plot from data file with comprehensive visualization options.
 
 **Parameters**:
-- `file_path` (str): Absolute path to CSV or Excel file
-- `x_column` (str): Column name for x-axis data
-- `y_column` (str): Column name for y-axis data
-- `title` (str, optional): Custom plot title
-- `output_path` (str, optional): Path to save the plot image
+- `file_path` (str): Parameter for file_path
+- `x_column` (str): Parameter for x_column
+- `y_column` (str): Parameter for y_column
+- `title` (str, optional): Parameter for title (default: Line Plot)
+- `output_path` (str, optional): Parameter for output_path (default: line_plot.png)
 
-**Returns**: Line plot visualization with trend analysis, statistical insights, and saved image file path.
+**Returns**: Dictionary containing: - plot_info: Details about the generated plot including dimensions and format - data_summary: Statistical summary of the plotted data - file_details: Information about the output file size and location - visualization_stats: Metrics about data points and trends
 
 ### `bar_plot`
-**Description**: Generate comprehensive bar charts with intelligent data aggregation and professional styling. Supports categorical data analysis, comparison visualization, and statistical summarization with customizable formatting.
+**Description**: Create a bar plot from data file with comprehensive customization options.
 
 **Parameters**:
-- `file_path` (str): Absolute path to CSV or Excel file
-- `x_column` (str): Column name for categories (x-axis)
-- `y_column` (str): Column name for values (y-axis)
-- `title` (str, optional): Custom plot title
-- `output_path` (str, optional): Path to save the plot image
+- `file_path` (str): Parameter for file_path
+- `x_column` (str): Parameter for x_column
+- `y_column` (str): Parameter for y_column
+- `title` (str, optional): Parameter for title (default: Bar Plot)
+- `output_path` (str, optional): Parameter for output_path (default: bar_plot.png)
 
-**Returns**: Bar chart visualization with categorical analysis, summary statistics, and saved image file path.
+**Returns**: Dictionary containing: - plot_info: Details about the generated bar chart including bar count and styling - data_summary: Statistical summary of the categorical and numerical data - file_details: Information about the output file size and location - visualization_stats: Metrics about data distribution and categories
 
 ### `scatter_plot`
-**Description**: Create detailed scatter plots with correlation analysis and trend identification. Provides relationship analysis between variables with statistical correlation metrics and regression analysis capabilities.
+**Description**: Create a scatter plot from data file with advanced correlation analysis.
 
 **Parameters**:
-- `file_path` (str): Absolute path to CSV or Excel file
-- `x_column` (str): Column name for x-axis variable
-- `y_column` (str): Column name for y-axis variable
-- `title` (str, optional): Custom plot title
-- `output_path` (str, optional): Path to save the plot image
+- `file_path` (str): Parameter for file_path
+- `x_column` (str): Parameter for x_column
+- `y_column` (str): Parameter for y_column
+- `title` (str, optional): Parameter for title (default: Scatter Plot)
+- `output_path` (str, optional): Parameter for output_path (default: scatter_plot.png)
 
-**Returns**: Scatter plot with correlation analysis, trend lines, statistical metrics, and saved image file path.
+**Returns**: Dictionary containing: - plot_info: Details about the generated scatter plot including point count and styling - correlation_stats: Statistical correlation metrics and trend analysis - data_summary: Statistical summary of both x and y variables - file_details: Information about the output file size and location
 
 ### `histogram_plot`
-**Description**: Generate comprehensive histograms with statistical distribution analysis and intelligent binning. Provides data distribution insights with normality testing and descriptive statistics.
+**Description**: Create a histogram from data file with advanced statistical analysis.
 
 **Parameters**:
-- `file_path` (str): Absolute path to CSV or Excel file
-- `column` (str): Column name for histogram data
-- `bins` (int, optional): Number of histogram bins (auto-calculated if not specified)
-- `title` (str, optional): Custom plot title
-- `output_path` (str, optional): Path to save the plot image
+- `file_path` (str): Parameter for file_path
+- `column` (str): Parameter for column
+- `bins` (int, optional): Parameter for bins (default: 30)
+- `title` (str, optional): Parameter for title (default: Histogram)
+- `output_path` (str, optional): Parameter for output_path (default: histogram.png)
 
-**Returns**: Histogram visualization with distribution analysis, statistical summary, and saved image file path.
+**Returns**: Dictionary containing: - plot_info: Details about the generated histogram including bin information - distribution_stats: Statistical metrics including mean, median, mode, and standard deviation - data_summary: Comprehensive summary of the data distribution - file_details: Information about the output file size and location
 
 ### `heatmap_plot`
-**Description**: Create correlation heatmaps and matrix visualizations with comprehensive statistical analysis. Supports correlation matrices, data pattern identification, and relationship visualization with professional styling.
+**Description**: Create a heatmap from data file with advanced correlation visualization.
 
 **Parameters**:
-- `file_path` (str): Absolute path to CSV or Excel file
-- `columns` (list, optional): Specific columns for correlation analysis
-- `title` (str, optional): Custom plot title
-- `output_path` (str, optional): Path to save the plot image
+- `file_path` (str): Parameter for file_path
+- `title` (str, optional): Parameter for title (default: Heatmap)
+- `output_path` (str, optional): Parameter for output_path (default: heatmap.png)
 
-**Returns**: Heatmap visualization with correlation matrix, statistical significance, and saved image file path.
+**Returns**: Dictionary containing: - plot_info: Details about the generated heatmap including matrix dimensions - correlation_matrix: Full correlation matrix with statistical significance - data_summary: Statistical summary of all numerical variables - file_details: Information about the output file size and location
 
 ### `data_info`
-**Description**: Analyze dataset structure and provide comprehensive data profiling with quality assessment. Includes data types, missing values, statistical summary, and data quality recommendations.
+**Description**: Get comprehensive data file information with detailed analysis.
 
 **Parameters**:
-- `file_path` (str): Absolute path to CSV or Excel file
+- `file_path` (str): Parameter for file_path
 
-**Returns**: Comprehensive data analysis including structure, types, missing values, statistics, and quality assessment.
-
+**Returns**: Dictionary containing: - data_schema: Column names, data types, and null value analysis - data_quality: Missing values, duplicates, and data consistency metrics - statistical_summary: Basic statistics for numerical and categorical columns - visualization_recommendations: Suggested plot types based on data characteristics
 ## Examples
 
 ### 1. Data Exploration and Analysis

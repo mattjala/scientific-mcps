@@ -111,160 +111,169 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Pandas run pandas-mcp --help
 ## Capabilities
 
 ### `load_data`
-**Description**: Load data from various file formats (CSV, Excel, JSON, Parquet) with intelligent format detection, encoding handling, and comprehensive data type inference for seamless data processing.
+**Description**: Load data from various file formats with comprehensive parsing options.
 
 **Parameters**:
-- `file_path` (str): Absolute path to the data file
-- `file_format` (str, optional): File format specification (auto-detected if not provided)
-- `encoding` (str, optional): Character encoding (auto-detected if not provided)
+- `file_path` (str): Parameter for file_path
+- `file_format` (Any, optional): Parameter for file_format
+- `sheet_name` (Any, optional): Parameter for sheet_name
+- `encoding` (Any, optional): Parameter for encoding
+- `columns` (Any, optional): Parameter for columns
+- `nrows` (Any, optional): Parameter for nrows
 
-**Returns**: Loaded DataFrame with metadata, data types, and loading statistics.
+**Returns**: Dictionary containing: - data: Loaded dataset in structured format - metadata: File information, data types, and loading statistics - data_info: Shape, columns, and data quality metrics - loading_stats: Performance metrics and parsing information
 
 ### `save_data`
-**Description**: Save DataFrame to multiple file formats with intelligent formatting, compression options, and performance optimization for efficient data export and sharing.
+**Description**: Save data to various file formats with comprehensive export options.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame to save
-- `file_path` (str): Output file path with format extension
-- `format` (str, optional): Output format (CSV, Excel, JSON, Parquet)
-- `compression` (str, optional): Compression method for size optimization
+- `data` (dict): Parameter for data
+- `file_path` (str): Parameter for file_path
+- `file_format` (Any, optional): Parameter for file_format
+- `index` (bool, optional): Parameter for index (default: True)
 
-**Returns**: Save confirmation with file size, format details, and performance metrics.
+**Returns**: Dictionary containing: - save_info: File save details including size and format - compression_stats: Space savings and compression metrics - export_stats: Performance metrics and data integrity checks - file_details: Output file specifications and validation
 
 ### `statistical_summary`
-**Description**: Generate comprehensive statistical analysis including descriptive statistics, distribution analysis, and data quality metrics with intelligent insights and recommendations.
+**Description**: Generate comprehensive statistical summary with advanced analytics.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame for statistical analysis
-- `columns` (list, optional): Specific columns to analyze
+- `file_path` (str): Parameter for file_path
+- `columns` (Any, optional): Parameter for columns
+- `include_distributions` (bool, optional): Parameter for include_distributions (default: False)
 
-**Returns**: Complete statistical summary with descriptive statistics, distribution analysis, and data quality insights.
+**Returns**: Dictionary containing: - descriptive_stats: Mean, median, mode, standard deviation, and percentiles - distribution_analysis: Skewness, kurtosis, and normality test results - data_profiling: Data types, missing values, and unique value counts - outlier_detection: Outlier identification and statistical anomalies
 
 ### `correlation_analysis`
-**Description**: Perform comprehensive correlation analysis using multiple methods (Pearson, Spearman, Kendall) with significance testing and visualization recommendations for relationship discovery.
+**Description**: Perform comprehensive correlation analysis with statistical significance testing.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame for correlation analysis
-- `method` (str, optional): Correlation method (pearson, spearman, kendall)
-- `columns` (list, optional): Specific columns for correlation analysis
+- `file_path` (str): Parameter for file_path
+- `method` (str, optional): Parameter for method (default: pearson)
+- `columns` (Any, optional): Parameter for columns
 
-**Returns**: Correlation matrix with significance levels, strength interpretation, and visualization recommendations.
+**Returns**: Dictionary containing: - correlation_matrix: Full correlation matrix with coefficient values - significance_tests: P-values and statistical significance indicators - correlation_insights: Strong correlations and dependency patterns - visualization_data: Data formatted for correlation heatmaps and plots
 
 ### `hypothesis_testing`
-**Description**: Conduct statistical hypothesis testing including t-tests, ANOVA, chi-square tests, and normality testing with comprehensive result interpretation and statistical insights.
+**Description**: Perform comprehensive statistical hypothesis testing with multiple test types and advanced analysis.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame for hypothesis testing
-- `test_type` (str): Type of statistical test to perform
-- `columns` (list): Columns involved in the test
-- `alpha` (float, optional): Significance level (default: 0.05)
+- `file_path` (str): Parameter for file_path
+- `test_type` (str): Parameter for test_type
+- `column1` (str): Parameter for column1
+- `column2` (Any, optional): Parameter for column2
+- `alpha` (float, optional): Parameter for alpha (default: 0.05)
 
-**Returns**: Test results with p-values, test statistics, conclusions, and interpretation guidance.
+**Returns**: Dictionary containing: - test_results: Statistical test results including test statistic and p-value - effect_size: Effect size measures and practical significance assessment - confidence_intervals: Confidence intervals for parameters and differences - interpretation: Statistical interpretation and practical conclusions
 
 ### `handle_missing_data`
-**Description**: Intelligent missing data handling with multiple imputation strategies, pattern analysis, and data quality assessment for robust data preprocessing.
+**Description**: Handle missing data with comprehensive strategies and statistical methods.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame with missing values
-- `strategy` (str): Imputation strategy (mean, median, mode, forward_fill, backward_fill, drop)
-- `columns` (list, optional): Specific columns to process
+- `file_path` (str): Parameter for file_path
+- `strategy` (str, optional): Parameter for strategy (default: detect)
+- `method` (Any, optional): Parameter for method
+- `columns` (Any, optional): Parameter for columns
 
-**Returns**: Processed DataFrame with missing data handled and imputation summary report.
+**Returns**: Dictionary containing: - missing_data_report: Detailed analysis of missing data patterns - imputation_results: Results of imputation with quality metrics - data_completeness: Before/after comparison of data completeness - strategy_recommendations: Suggested approaches for optimal data handling
 
 ### `clean_data`
-**Description**: Comprehensive data cleaning including outlier detection and removal, duplicate handling, data type optimization, and quality validation for analysis-ready datasets.
+**Description**: Perform comprehensive data cleaning with advanced quality improvement techniques.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame to clean
-- `remove_outliers` (bool, optional): Whether to detect and remove outliers
-- `remove_duplicates` (bool, optional): Whether to remove duplicate rows
-- `optimize_types` (bool, optional): Whether to optimize data types
+- `file_path` (str): Parameter for file_path
+- `remove_duplicates` (bool, optional): Parameter for remove_duplicates (default: False)
+- `detect_outliers` (bool, optional): Parameter for detect_outliers (default: False)
+- `convert_types` (bool, optional): Parameter for convert_types (default: False)
 
-**Returns**: Cleaned DataFrame with quality report, outlier analysis, and optimization details.
+**Returns**: Dictionary containing: - cleaning_report: Detailed summary of cleaning operations performed - data_quality_metrics: Before/after data quality comparison - outlier_analysis: Outlier detection results and recommendations - type_conversion_log: Data type changes and optimization results
 
 ### `groupby_operations`
-**Description**: Advanced grouping and aggregation operations with multiple aggregation functions, statistical analysis, and intelligent insights for categorical data analysis.
+**Description**: Perform sophisticated groupby operations with comprehensive aggregation options.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame for grouping operations
-- `group_columns` (list): Columns to group by
-- `agg_columns` (list): Columns to aggregate
-- `agg_functions` (list): Aggregation functions to apply
+- `file_path` (str): Parameter for file_path
+- `group_by` (Any): Parameter for group_by
+- `operations` (Any): Parameter for operations
+- `filter_condition` (Any, optional): Parameter for filter_condition
 
-**Returns**: Grouped results with aggregation summary, statistical insights, and comparative analysis.
+**Returns**: Dictionary containing: - grouped_results: Results of groupby operations with aggregated data - group_statistics: Statistics about group sizes and distributions - aggregation_summary: Summary of all aggregation operations performed - performance_metrics: Groupby operation performance and optimization insights
 
 ### `merge_datasets`
-**Description**: Intelligent dataset merging and joining with multiple join strategies, relationship validation, and data quality assessment for comprehensive data integration.
+**Description**: Merge and join datasets with comprehensive integration capabilities.
 
 **Parameters**:
-- `left_data` (DataFrame): Left DataFrame for merging
-- `right_data` (DataFrame): Right DataFrame for merging
-- `join_type` (str): Type of join (inner, outer, left, right)
-- `on_columns` (list): Columns to join on
+- `left_file` (str): Parameter for left_file
+- `right_file` (str): Parameter for right_file
+- `join_type` (str, optional): Parameter for join_type (default: inner)
+- `left_on` (Any, optional): Parameter for left_on
+- `right_on` (Any, optional): Parameter for right_on
+- `on` (Any, optional): Parameter for on
 
-**Returns**: Merged DataFrame with join statistics, relationship analysis, and data quality assessment.
+**Returns**: Dictionary containing: - merged_data: Results of the merge operation - merge_statistics: Statistics about the merge operation and data overlap - data_quality_report: Quality assessment of the merged dataset - relationship_analysis: Analysis of data relationships and join effectiveness
 
 ### `pivot_table`
-**Description**: Create comprehensive pivot tables with multi-level indexing, multiple aggregation functions, and statistical analysis for cross-tabulation and summary reporting.
+**Description**: Create sophisticated pivot tables with comprehensive aggregation options.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame for pivot table creation
-- `index` (list): Columns for row indexing
-- `columns` (list): Columns for column indexing
-- `values` (list): Columns for aggregation
-- `aggfunc` (str, optional): Aggregation function
+- `file_path` (str): Parameter for file_path
+- `index` (Any): Parameter for index
+- `columns` (Any, optional): Parameter for columns
+- `values` (Any, optional): Parameter for values
+- `aggfunc` (str, optional): Parameter for aggfunc (default: mean)
 
-**Returns**: Pivot table with statistical summary, cross-tabulation analysis, and formatting recommendations.
+**Returns**: Dictionary containing: - pivot_results: The pivot table with aggregated data - summary_statistics: Statistical summary of the pivot operation - data_insights: Key insights and patterns from the pivot analysis - visualization_data: Data formatted for pivot table visualization
 
 ### `time_series_operations`
-**Description**: Advanced time series analysis including resampling, rolling windows, lag features, and temporal pattern analysis for time-based data insights.
+**Description**: Perform comprehensive time series operations with advanced temporal analysis.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame with time series data
-- `date_column` (str): Column containing datetime information
-- `operation` (str): Time series operation (resample, rolling, lag, decompose)
-- `frequency` (str, optional): Resampling frequency
+- `file_path` (str): Parameter for file_path
+- `date_column` (str): Parameter for date_column
+- `operation` (str): Parameter for operation
+- `window_size` (Any, optional): Parameter for window_size
+- `frequency` (Any, optional): Parameter for frequency
 
-**Returns**: Time series analysis results with temporal patterns, trends, and statistical insights.
+**Returns**: Dictionary containing: - time_series_results: Results of the time series operation - temporal_analysis: Trend and seasonality analysis - statistical_summary: Time series statistical properties - forecasting_insights: Patterns and insights for forecasting applications
 
 ### `validate_data`
-**Description**: Comprehensive data validation with business rule checking, constraint validation, and data quality assessment for reliable analysis and reporting.
+**Description**: Perform comprehensive data validation with advanced constraint checking and quality assessment.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame to validate
-- `rules` (dict): Validation rules and constraints
-- `columns` (list, optional): Specific columns to validate
+- `file_path` (str): Parameter for file_path
+- `validation_rules` (Any): Parameter for validation_rules
 
-**Returns**: Validation report with rule compliance, quality metrics, and issue identification.
+**Returns**: Dictionary containing: - validation_results: Detailed validation results for each column and rule - data_quality_score: Overall data quality score and assessment - violation_summary: Summary of validation violations and error patterns - recommendations: Suggested actions for data quality improvement
 
 ### `filter_data`
-**Description**: Advanced data filtering with complex conditions, range filtering, and pattern matching for precise data subset selection and analysis.
+**Description**: Perform advanced data filtering with sophisticated boolean indexing and conditional expressions.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame to filter
-- `conditions` (dict): Filtering conditions and criteria
-- `columns` (list, optional): Specific columns for filtering
+- `file_path` (str): Parameter for file_path
+- `filter_conditions` (Any): Parameter for filter_conditions
+- `output_file` (Any, optional): Parameter for output_file
 
-**Returns**: Filtered DataFrame with filtering summary and subset statistics.
+**Returns**: Dictionary containing: - filtered_data: Results of filtering operation with matching records - filter_statistics: Summary of filtering results including row counts - data_quality_report: Quality assessment of filtered dataset - performance_metrics: Filtering operation performance and efficiency
 
 ### `optimize_memory`
-**Description**: Intelligent memory optimization with data type conversion, categorical encoding, and storage efficiency analysis for large dataset processing.
+**Description**: Perform advanced memory optimization for large datasets with intelligent strategies.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame to optimize
-- `categorical_threshold` (int, optional): Threshold for categorical conversion
+- `file_path` (str): Parameter for file_path
+- `optimize_dtypes` (bool, optional): Parameter for optimize_dtypes (default: True)
+- `chunk_size` (Any, optional): Parameter for chunk_size
 
-**Returns**: Memory-optimized DataFrame with optimization report and efficiency metrics.
+**Returns**: Dictionary containing: - memory_optimization_results: Before/after memory usage comparison - dtype_optimization_log: Details of data type changes and memory savings - chunking_strategy: Optimal chunking recommendations for large datasets - performance_metrics: Speed and efficiency improvements achieved
 
 ### `profile_data`
-**Description**: Generate comprehensive data profiling report including data quality assessment, statistical analysis, pattern recognition, and recommendation insights.
+**Description**: Perform comprehensive data profiling with detailed statistical analysis and quality assessment.
 
 **Parameters**:
-- `data` (DataFrame): Pandas DataFrame to profile
-- `detailed` (bool, optional): Whether to include detailed analysis
+- `file_path` (str): Parameter for file_path
+- `include_correlations` (bool, optional): Parameter for include_correlations (default: False)
+- `sample_size` (Any, optional): Parameter for sample_size
 
-**Returns**: Complete data profile with quality metrics, statistical analysis, and actionable insights.
-
+**Returns**: Dictionary containing: - data_profile: Comprehensive dataset overview including shape, types, and statistics - column_analysis: Detailed analysis of each column including distributions - data_quality_metrics: Missing values, duplicates, and data quality indicators - correlation_matrix: Variable correlations (if include_correlations is True)
 ## Examples
 
 ### 1. Data Loading and Profiling
