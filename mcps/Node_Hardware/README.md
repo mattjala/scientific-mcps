@@ -110,6 +110,87 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Node_Hardware run node-hardware-m
 
 ## Capabilities
 
+### `get_cpu_info`
+**Description**: Get comprehensive CPU information including specifications, core count, frequency, architecture, and performance metrics with intelligent analysis and optimization recommendations.
+
+**Parameters**: None required
+
+**Returns**: Complete CPU specifications with architecture details, performance metrics, utilization analysis, and optimization insights.
+
+### `get_memory_info`
+**Description**: Analyze system memory including total, available, used memory, swap information, and performance metrics with intelligent memory usage analysis and optimization recommendations.
+
+**Parameters**: None required
+
+**Returns**: Comprehensive memory analysis with usage statistics, performance metrics, and memory optimization recommendations.
+
+### `get_system_info`
+**Description**: Get detailed system information including operating system, kernel version, hostname, uptime, and system configuration with comprehensive system health analysis.
+
+**Parameters**: None required
+
+**Returns**: Complete system information with configuration details, uptime analysis, and system health assessment.
+
+### `get_disk_info`
+**Description**: Analyze disk storage including capacity, usage, file systems, and I/O performance metrics with intelligent storage analysis and optimization recommendations.
+
+**Parameters**: None required
+
+**Returns**: Comprehensive disk analysis with storage usage, I/O performance, and storage optimization insights.
+
+### `get_network_info`
+**Description**: Get network interface information including IP addresses, bandwidth, traffic statistics, and performance metrics with network analysis and optimization recommendations.
+
+**Parameters**: None required
+
+**Returns**: Complete network analysis with interface details, traffic statistics, and network performance insights.
+
+### `get_gpu_info`
+**Description**: Analyze GPU hardware including specifications, memory, utilization, and performance metrics with intelligent GPU analysis for machine learning and computational workloads.
+
+**Parameters**: None required
+
+**Returns**: Comprehensive GPU information with specifications, utilization metrics, and performance optimization recommendations.
+
+### `get_sensor_info`
+**Description**: Monitor system sensors including temperature, fan speeds, voltage, and thermal management with intelligent thermal analysis and system health monitoring.
+
+**Parameters**: None required
+
+**Returns**: Complete sensor data with thermal analysis, cooling efficiency, and system health recommendations.
+
+### `get_process_info`
+**Description**: Analyze running processes including CPU usage, memory consumption, and performance metrics with intelligent process analysis and resource optimization insights.
+
+**Parameters**: None required
+
+**Returns**: Comprehensive process analysis with resource usage, performance metrics, and optimization recommendations.
+
+### `get_performance_info`
+**Description**: Get detailed performance metrics including CPU load, memory pressure, I/O statistics, and system bottleneck analysis with intelligent performance optimization recommendations.
+
+**Parameters**: None required
+
+**Returns**: Complete performance analysis with bottleneck identification, efficiency metrics, and optimization strategies.
+
+### `get_remote_node_info`
+**Description**: Monitor remote system hardware via SSH connection with comprehensive component analysis, performance monitoring, and intelligent insights for distributed system management.
+
+**Parameters**:
+- `hostname` (str): Remote host IP address or hostname
+- `username` (str): SSH username for authentication
+- `password` (str, optional): SSH password (use key-based auth when possible)
+- `port` (int, optional): SSH port (default: 22)
+- `components` (list, optional): Specific components to monitor
+
+**Returns**: Complete remote hardware analysis with component details, performance metrics, and comparative insights.
+
+### `health_check`
+**Description**: Perform comprehensive system health check with capability verification, diagnostic assessment, and intelligent system analysis for monitoring tool validation and system reliability.
+
+**Parameters**: None required
+
+**Returns**: Complete health assessment with system status, capability verification, diagnostic insights, and maintenance recommendations.
 
 ## Examples
 
