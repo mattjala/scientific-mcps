@@ -109,6 +109,227 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Jarvis run jarvis-mcp --help
 
 ## Capabilities
 
+### `create_pipeline`
+**Description**: Create a new Jarvis-CD pipeline environment with intelligent configuration management and automated setup for data-centric pipeline development and execution.
+
+**Parameters**:
+- `pipeline_name` (str): Name for the new pipeline environment
+
+**Returns**: Pipeline creation confirmation with environment details and configuration status.
+
+### `load_pipeline`
+**Description**: Load an existing Jarvis-CD pipeline environment with configuration restoration and context switching for pipeline management and execution.
+
+**Parameters**:
+- `pipeline_name` (str): Name of the pipeline to load
+
+**Returns**: Pipeline loading confirmation with environment status and configuration details.
+
+### `update_pipeline`
+**Description**: Update pipeline configurations and apply changes to all packages with intelligent dependency management and configuration synchronization.
+
+**Parameters**: None required (operates on current pipeline context)
+
+**Returns**: Update confirmation with configuration changes and package status.
+
+### `build_pipeline_env`
+**Description**: Build the complete pipeline execution environment with dependency resolution, package compilation, and environment preparation for high-performance execution.
+
+**Parameters**: None required (operates on current pipeline context)
+
+**Returns**: Build confirmation with environment status, dependency resolution, and compilation results.
+
+### `run_pipeline`
+**Description**: Execute a Jarvis-CD pipeline end-to-end with intelligent resource management, monitoring, and performance optimization for production workflows.
+
+**Parameters**: None required (operates on current pipeline context)
+
+**Returns**: Execution results with performance metrics, resource utilization, and completion status.
+
+### `destroy_pipeline`
+**Description**: Safely destroy a pipeline environment with comprehensive cleanup and resource management to free system resources and remove configurations.
+
+**Parameters**:
+- `pipeline_name` (str): Name of the pipeline to destroy
+
+**Returns**: Destruction confirmation with cleanup status and resource release details.
+
+### `append_pkg`
+**Description**: Append a package to a Jarvis-CD pipeline with intelligent dependency resolution and configuration management for modular pipeline development.
+
+**Parameters**:
+- `package_name` (str): Name of the package to add to pipeline
+
+**Returns**: Package addition confirmation with dependency status and configuration details.
+
+### `get_pkg_config`
+**Description**: Get detailed package configuration including parameters, dependencies, and settings with comprehensive configuration analysis and optimization recommendations.
+
+**Parameters**:
+- `package_name` (str): Name of the package to inspect
+
+**Returns**: Complete package configuration with parameters, dependencies, and optimization insights.
+
+### `configure_pkg`
+**Description**: Configure a package in a Jarvis-CD pipeline with intelligent parameter validation and optimization recommendations for enhanced performance and reliability.
+
+**Parameters**:
+- `package_name` (str): Name of the package to configure
+- `config_params` (dict): Configuration parameters and values
+
+**Returns**: Configuration confirmation with parameter validation and optimization recommendations.
+
+### `unlink_pkg`
+**Description**: Unlink a package from the pipeline while preserving configuration with intelligent dependency management and rollback capabilities.
+
+**Parameters**:
+- `package_name` (str): Name of the package to unlink
+
+**Returns**: Unlink confirmation with dependency status and rollback information.
+
+### `remove_pkg`
+**Description**: Completely remove a package from the pipeline with comprehensive cleanup and dependency resolution to maintain pipeline integrity.
+
+**Parameters**:
+- `package_name` (str): Name of the package to remove
+
+**Returns**: Removal confirmation with cleanup status and dependency resolution results.
+
+### `jm_create_config`
+**Description**: Initialize JarvisManager configuration directories with intelligent setup and default configurations for comprehensive pipeline management infrastructure.
+
+**Parameters**: None required
+
+**Returns**: Configuration initialization status with directory structure and default settings.
+
+### `jm_load_config`
+**Description**: Load existing JarvisManager configuration with validation and compatibility checking for seamless configuration restoration and management.
+
+**Parameters**: None required
+
+**Returns**: Configuration loading status with validation results and compatibility analysis.
+
+### `jm_save_config`
+**Description**: Save current JarvisManager configuration with backup management and versioning for reliable configuration persistence and recovery.
+
+**Parameters**: None required
+
+**Returns**: Configuration save confirmation with backup status and version information.
+
+### `jm_set_hostfile`
+**Description**: Set hostfile path for JarvisManager with host validation and network configuration for distributed pipeline execution and resource management.
+
+**Parameters**:
+- `hostfile_path` (str): Path to the hostfile for distributed execution
+
+**Returns**: Hostfile configuration confirmation with validation status and network setup details.
+
+### `jm_bootstrap_from`
+**Description**: Bootstrap JarvisManager from a machine template with intelligent system configuration and automated setup for rapid deployment and standardization.
+
+**Parameters**:
+- `machine_name` (str): Name of the machine template to bootstrap from
+
+**Returns**: Bootstrap confirmation with system configuration and deployment status.
+
+### `jm_bootstrap_list`
+**Description**: List available bootstrap machine templates with detailed specifications and compatibility information for informed template selection and deployment planning.
+
+**Parameters**: None required
+
+**Returns**: Complete template listing with specifications, compatibility, and deployment recommendations.
+
+### `jm_reset`
+**Description**: Reset JarvisManager by destroying all pipelines and data with comprehensive cleanup and system restoration for fresh installation and troubleshooting.
+
+**Parameters**: None required
+
+**Returns**: Reset confirmation with cleanup status and system restoration details.
+
+### `jm_list_pipelines`
+**Description**: List all existing Jarvis pipelines with detailed status information and resource utilization for comprehensive pipeline management and monitoring.
+
+**Parameters**: None required
+
+**Returns**: Complete pipeline inventory with status, resource usage, and management recommendations.
+
+### `jm_cd`
+**Description**: Change current Jarvis pipeline context with intelligent context switching and environment preparation for seamless pipeline management and operation.
+
+**Parameters**:
+- `pipeline_name` (str): Name of the pipeline to switch to
+
+**Returns**: Context switch confirmation with environment status and pipeline details.
+
+### `jm_list_repos`
+**Description**: List all Jarvis repositories with detailed information including priority, status, and package availability for comprehensive repository management and package discovery.
+
+**Parameters**: None required
+
+**Returns**: Complete repository listing with priority, status, package counts, and management insights.
+
+### `jm_add_repo`
+**Description**: Add a repository to JarvisManager with validation and integration for expanded package availability and ecosystem integration.
+
+**Parameters**:
+- `repo_url` (str): URL or path to the repository to add
+
+**Returns**: Repository addition confirmation with validation status and integration details.
+
+### `jm_remove_repo`
+**Description**: Remove a repository from JarvisManager with dependency checking and safe removal to maintain system integrity and package availability.
+
+**Parameters**:
+- `repo_name` (str): Name of the repository to remove
+
+**Returns**: Repository removal confirmation with dependency status and cleanup details.
+
+### `jm_promote_repo`
+**Description**: Promote a repository in JarvisManager priority order with intelligent priority management and package resolution optimization for improved performance and reliability.
+
+**Parameters**:
+- `repo_name` (str): Name of the repository to promote
+
+**Returns**: Repository promotion confirmation with new priority and resolution optimization details.
+
+### `jm_get_repo`
+**Description**: Get detailed repository information from JarvisManager including packages, status, and performance metrics for comprehensive repository analysis and management.
+
+**Parameters**:
+- `repo_name` (str): Name of the repository to analyze
+
+**Returns**: Complete repository information with packages, status, metrics, and optimization recommendations.
+
+### `jm_construct_pkg`
+**Description**: Construct a package in JarvisManager with intelligent build management and dependency resolution for reliable package creation and deployment.
+
+**Parameters**:
+- `package_name` (str): Name of the package to construct
+
+**Returns**: Package construction confirmation with build status and dependency resolution details.
+
+### `jm_graph_show`
+**Description**: Display the current resource graph frames with comprehensive visualization and analysis for resource monitoring and performance optimization.
+
+**Parameters**: None required
+
+**Returns**: Resource graph visualization with frames, metrics, and performance analysis.
+
+### `jm_graph_build`
+**Description**: Build resource graph with custom intervals and monitoring configuration for enhanced resource tracking and performance analysis capabilities.
+
+**Parameters**:
+- `interval` (float): Monitoring interval in seconds
+
+**Returns**: Resource graph build confirmation with monitoring configuration and performance metrics.
+
+### `jm_graph_modify`
+**Description**: Modify resource graph parameters and configuration with intelligent optimization and performance tuning for enhanced monitoring and analysis capabilities.
+
+**Parameters**:
+- `modifications` (dict): Graph modification parameters and settings
+
+**Returns**: Graph modification confirmation with updated configuration and optimization details.
 
 ## Examples
 
