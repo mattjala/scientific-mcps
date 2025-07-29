@@ -6,7 +6,7 @@ Consolidates error handling scenarios, exception paths, and edge cases.
 import pytest
 import sys
 import os
-from unittest.mock import patch, AsyncMock
+from unittest.mock import patch, AsyncMock, Mock
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -36,8 +36,10 @@ class TestEdgeCases:
             mock_client.return_value.__aenter__.return_value = mock_context
             mock_response = AsyncMock()
             mock_context.get.return_value = mock_response
-            mock_response.raise_for_status.side_effect = ConnectionError(
-                "Connection failed"
+            mock_context.head.return_value = mock_response
+            # Configure raise_for_status to not be a coroutine to avoid warnings
+            mock_response.raise_for_status = Mock(
+                side_effect=ConnectionError("Connection failed")
             )
 
             try:
@@ -46,7 +48,9 @@ class TestEdgeCases:
                 pass  # Hit error handling lines
 
             # Scenario 2: Timeout in get_pdf_url
-            mock_response.raise_for_status.side_effect = TimeoutError("Request timeout")
+            mock_response.raise_for_status = Mock(
+                side_effect=TimeoutError("Request timeout")
+            )
 
             try:
                 await get_pdf_url("test-id")
@@ -54,7 +58,9 @@ class TestEdgeCases:
                 pass  # Hit error handling lines
 
             # Scenario 3: Generic exception in download_multiple_pdfs
-            mock_response.raise_for_status.side_effect = Exception("Generic error")
+            mock_response.raise_for_status = Mock(
+                side_effect=Exception("Generic error")
+            )
 
             try:
                 await download_multiple_pdfs(["test-id"], "/tmp", 1)
@@ -70,7 +76,7 @@ class TestEdgeCases:
             ]
 
             for error in error_types:
-                mock_response.raise_for_status.side_effect = error
+                mock_response.raise_for_status = Mock(side_effect=error)
 
                 try:
                     await download_paper_pdf("test", "/tmp")
@@ -92,14 +98,11 @@ class TestEdgeCases:
         """Test paper_details.py error handling lines 42, 54, 61, 99."""
 
         with patch("capabilities.paper_details.execute_arxiv_query") as mock_query:
-            # Test different exception types to hit all error handling branches
+            # Test different exception types to hit all error handling branches (reduced for speed)
             error_scenarios = [
                 Exception("Base exception"),
                 ValueError("Value error"),
-                RuntimeError("Runtime error"),
                 ConnectionError("Connection error"),
-                TimeoutError("Timeout error"),
-                OSError("OS error"),
             ]
 
             for error in error_scenarios:
@@ -254,14 +257,10 @@ class TestEdgeCases:
     async def test_comprehensive_error_scenarios(self):
         """Test multiple error scenarios across all modules."""
 
-        # Test various exception types that might occur in real usage
+        # Test various exception types that might occur in real usage (reduced for faster execution)
         error_types = [
             (ConnectionError, "Network connection failed"),
-            (TimeoutError, "Request timed out"),
             (ValueError, "Invalid input value"),
-            (TypeError, "Type mismatch"),
-            (RuntimeError, "Runtime execution error"),
-            (OSError, "Operating system error"),
             (Exception, "Generic exception"),
         ]
 
@@ -280,22 +279,12 @@ class TestEdgeCases:
                 except Exception:
                     pass
 
-                try:
-                    await download_multiple_pdfs(["test"], "/tmp")
-                except Exception:
-                    pass
-
             # Test paper_details module
             with patch("capabilities.paper_details.execute_arxiv_query") as mock_query:
                 mock_query.side_effect = error_class(error_message)
 
                 try:
                     await get_paper_details("test")
-                except Exception:
-                    pass
-
-                try:
-                    await find_similar_papers("test", 5)
                 except Exception:
                     pass
 

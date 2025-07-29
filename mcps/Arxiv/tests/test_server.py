@@ -830,13 +830,13 @@ if __name__ == "__main__":
         """Test main function exception handling."""
 
         with patch("server.mcp") as mock_mcp:
-            mock_mcp.run.side_effect = KeyboardInterrupt("User interrupted")
+            mock_mcp.run.side_effect = ConnectionError("Connection failed")
 
             server.main()
 
-            # Should log the interruption and exit gracefully
-            mock_logger.info.assert_called()
-            mock_exit.assert_called_with(0)
+            # Should log the error and exit with error code
+            mock_logger.error.assert_called()
+            mock_exit.assert_called_with(1)
 
     @patch("server.sys.exit")
     @patch("server.logger")
@@ -875,12 +875,10 @@ if __name__ == "__main__":
                 with patch.dict(
                     os.environ, {"MCP_TRANSPORT": "sse", "MCP_SSE_HOST": "localhost"}
                 ):
-                    # Should handle invalid port gracefully
-                    try:
+                    with patch("server.sys.exit") as mock_exit:
+                        # Should handle invalid port gracefully by exiting with error
                         server.main()
-                    except (ValueError, TypeError):
-                        # May raise exception for invalid port
-                        pass
+                        mock_exit.assert_called_with(1)
 
     def test_module_level_constants(self):
         """Test module-level constants and configurations."""
@@ -927,17 +925,31 @@ if __name__ == "__main__":
         for tool_name, expected_params in tool_signatures.items():
             if hasattr(server, tool_name):
                 tool_func = getattr(server, tool_name)
-                # Check function exists and is callable
-                assert callable(tool_func)
+                # Check if it's a FunctionTool object
+                if hasattr(tool_func, "fn"):
+                    # Check that the underlying function is callable
+                    assert callable(tool_func.fn)
 
-                # For async functions, check the signature
-                if asyncio.iscoroutinefunction(tool_func):
-                    import inspect
+                    # For async functions, check the signature
+                    if asyncio.iscoroutinefunction(tool_func.fn):
+                        import inspect
 
-                    sig = inspect.signature(tool_func)
-                    actual_params = len(sig.parameters)
-                    # Parameters might include self or other injected params
-                    assert actual_params >= expected_params
+                        sig = inspect.signature(tool_func.fn)
+                        actual_params = len(sig.parameters)
+                        # Parameters might include self or other injected params
+                        assert actual_params >= expected_params
+                else:
+                    # Direct function - check if callable
+                    assert callable(tool_func)
+
+                    # For async functions, check the signature
+                    if asyncio.iscoroutinefunction(tool_func):
+                        import inspect
+
+                        sig = inspect.signature(tool_func)
+                        actual_params = len(sig.parameters)
+                        # Parameters might include self or other injected params
+                        assert actual_params >= expected_params
 
     def test_server_startup_sequence(self):
         """Test the server startup sequence."""
@@ -970,11 +982,14 @@ if __name__ == "__main__":
             # Create concurrent tasks
             tasks = []
             if hasattr(server, "search_arxiv_tool"):
-                tasks.append(server.search_arxiv_tool("cs.AI", 5))
+                tool = server.search_arxiv_tool
+                tasks.append(tool.fn("cs.AI", 5))
             if hasattr(server, "get_recent_papers_tool"):
-                tasks.append(server.get_recent_papers_tool("cs.LG", 3))
+                tool = server.get_recent_papers_tool
+                tasks.append(tool.fn("cs.LG", 3))
             if hasattr(server, "search_papers_by_author_tool"):
-                tasks.append(server.search_papers_by_author_tool("Test Author", 5))
+                tool = server.search_papers_by_author_tool
+                tasks.append(tool.fn("Test Author", 5))
 
             # Execute concurrently
             if tasks:

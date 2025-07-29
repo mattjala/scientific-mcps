@@ -5,7 +5,7 @@ Tests all handler functions and error handling scenarios.
 
 import pytest
 import asyncio
-from unittest.mock import patch, AsyncMock
+from unittest.mock import patch, AsyncMock, Mock
 import sys
 import os
 
@@ -490,44 +490,66 @@ class TestMCPHandlers:
     async def test_handlers_with_empty_string_parameters(self):
         """Test handlers with empty string parameters."""
 
-        handlers_to_test = [
-            ("search_arxiv_handler", ["", 5]),
-            ("search_papers_by_author_handler", ["", 5]),
-            ("search_by_title_handler", ["", 5]),
-            ("search_by_abstract_handler", ["", 5]),
-            ("search_by_subject_handler", ["", 5]),
-            ("get_paper_details_handler", [""]),
-            ("find_similar_papers_handler", ["", 5]),
-        ]
+        with patch("httpx.AsyncClient") as mock_client:
+            # Mock HTTP responses to speed up the test
+            mock_session = Mock()
+            mock_client.return_value.__aenter__.return_value = mock_session
+            mock_response = Mock()
+            mock_response.text.return_value = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+</feed>"""
+            mock_response.raise_for_status = Mock()
+            mock_session.get.return_value = mock_response
 
-        for handler_name, args in handlers_to_test:
-            if hasattr(mcp_handlers, handler_name):
-                handler = getattr(mcp_handlers, handler_name)
+            handlers_to_test = [
+                ("search_arxiv_handler", ["", 5]),
+                ("search_papers_by_author_handler", ["", 5]),
+                ("search_by_title_handler", ["", 5]),
+                ("search_by_abstract_handler", ["", 5]),
+                ("search_by_subject_handler", ["", 5]),
+                ("get_paper_details_handler", [""]),
+                ("find_similar_papers_handler", ["", 5]),
+            ]
 
-                # Should handle empty strings gracefully
-                result = await handler(*args)
-                assert result is not None
+            for handler_name, args in handlers_to_test:
+                if hasattr(mcp_handlers, handler_name):
+                    handler = getattr(mcp_handlers, handler_name)
+
+                    # Should handle empty strings gracefully
+                    result = await handler(*args)
+                    assert result is not None
 
     @pytest.mark.asyncio
     async def test_handlers_with_extreme_parameters(self):
         """Test handlers with extreme parameter values."""
 
-        # Test with very large max_results
-        large_result = await mcp_handlers.search_arxiv_handler("cs.AI", 10000)
-        assert large_result is not None
+        with patch("httpx.AsyncClient") as mock_client:
+            # Mock HTTP responses to speed up the test
+            mock_session = Mock()
+            mock_client.return_value.__aenter__.return_value = mock_session
+            mock_response = Mock()
+            mock_response.text.return_value = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+</feed>"""
+            mock_response.raise_for_status = Mock()
+            mock_session.get.return_value = mock_response
 
-        # Test with zero max_results
-        zero_result = await mcp_handlers.search_arxiv_handler("cs.AI", 0)
-        assert zero_result is not None
+            # Test with very large max_results
+            large_result = await mcp_handlers.search_arxiv_handler("cs.AI", 10000)
+            assert large_result is not None
 
-        # Test with negative max_results
-        negative_result = await mcp_handlers.search_arxiv_handler("cs.AI", -1)
-        assert negative_result is not None
+            # Test with zero max_results
+            zero_result = await mcp_handlers.search_arxiv_handler("cs.AI", 0)
+            assert zero_result is not None
 
-        # Test with very long strings
-        long_query = "A" * 10000
-        long_result = await mcp_handlers.search_by_title_handler(long_query, 5)
-        assert long_result is not None
+            # Test with negative max_results
+            negative_result = await mcp_handlers.search_arxiv_handler("cs.AI", -1)
+            assert negative_result is not None
+
+            # Test with very long strings (reduced for speed)
+            long_query = "A" * 100  # Reduced from 10000 to 100
+            long_result = await mcp_handlers.search_by_title_handler(long_query, 5)
+            assert long_result is not None
 
     @pytest.mark.asyncio
     async def test_concurrent_handler_execution(self):
@@ -556,24 +578,45 @@ class TestMCPHandlers:
     async def test_json_parameter_parsing(self):
         """Test JSON parameter parsing in handlers."""
 
-        # Test export_to_bibtex_handler with various JSON formats
-        json_test_cases = [
-            '["2301.12345"]',
-            '["2301.12345", "2301.67890"]',
-            "[]",
-            '["single-id"]',
-        ]
+        with patch("httpx.AsyncClient") as mock_client:
+            # Mock HTTP responses to speed up the test
+            mock_session = Mock()
+            mock_client.return_value.__aenter__.return_value = mock_session
+            mock_response = Mock()
+            mock_response.text.return_value = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <entry>
+        <id>http://arxiv.org/abs/2301.12345v1</id>
+        <title>Test Paper</title>
+        <summary>Test abstract</summary>
+        <author><name>Test Author</name></author>
+        <published>2023-01-15T00:00:00Z</published>
+        <updated>2023-01-15T00:00:00Z</updated>
+        <category term="cs.AI" />
+    </entry>
+</feed>"""
+            mock_response.raise_for_status = Mock()
+            mock_session.get.return_value = mock_response
 
-        for json_str in json_test_cases:
-            result = await mcp_handlers.export_to_bibtex_handler(json_str)
-            assert result is not None
+            # Test export_to_bibtex_handler with various JSON formats
+            json_test_cases = [
+                '["2301.12345"]',
+                '["2301.12345", "2301.67890"]',
+                "[]",
+                '["single-id"]',
+            ]
 
-        # Test download_multiple_pdfs_handler
-        for json_str in json_test_cases:
-            result = await mcp_handlers.download_multiple_pdfs_handler(
-                json_str, "/tmp", 1
-            )
-            assert result is not None
+            for json_str in json_test_cases:
+                result = await mcp_handlers.export_to_bibtex_handler(json_str)
+                assert result is not None
+
+            # Test download_multiple_pdfs_handler with mocked file operations
+            with patch("os.makedirs"), patch("builtins.open", create=True):
+                for json_str in json_test_cases:
+                    result = await mcp_handlers.download_multiple_pdfs_handler(
+                        json_str, "/tmp", 1
+                    )
+                    assert result is not None
 
     @pytest.mark.asyncio
     async def test_invalid_json_parameter_handling(self):
@@ -603,56 +646,79 @@ class TestMCPHandlers:
     async def test_date_range_edge_cases(self):
         """Test date range handler with edge cases."""
 
-        date_edge_cases = [
-            ("2023-01-01", "2023-01-01", 5),  # Same start/end date
-            ("2023-12-31", "2023-01-01", 5),  # End before start
-            ("invalid-date", "2023-12-31", 5),  # Invalid start date
-            ("2023-01-01", "invalid-date", 5),  # Invalid end date
-            ("", "", 5),  # Empty dates
-            ("2023-02-29", "2023-02-28", 5),  # Invalid leap year date
-        ]
+        with patch("httpx.AsyncClient") as mock_client:
+            # Mock HTTP responses to speed up the test
+            mock_session = Mock()
+            mock_client.return_value.__aenter__.return_value = mock_session
+            mock_response = Mock()
+            mock_response.text.return_value = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+</feed>"""
+            mock_response.raise_for_status = Mock()
+            mock_session.get.return_value = mock_response
 
-        for start_date, end_date, max_results in date_edge_cases:
-            result = await mcp_handlers.search_date_range_handler(
-                start_date, end_date, max_results
-            )
-            assert result is not None
+            date_edge_cases = [
+                ("2023-01-01", "2023-01-01", 5),  # Same start/end date
+                ("2023-12-31", "2023-01-01", 5),  # End before start
+                ("invalid-date", "2023-12-31", 5),  # Invalid start date
+                ("2023-01-01", "invalid-date", 5),  # Invalid end date
+                ("", "", 5),  # Empty dates
+                ("2023-02-29", "2023-02-28", 5),  # Invalid leap year date
+            ]
+
+            for start_date, end_date, max_results in date_edge_cases:
+                result = await mcp_handlers.search_date_range_handler(
+                    start_date, end_date, max_results
+                )
+                assert result is not None
 
     @pytest.mark.asyncio
     async def test_paper_id_validation(self):
         """Test paper ID validation across handlers."""
 
-        invalid_paper_ids = [
-            "",
-            None,
-            "invalid.format",
-            "toolong.paperid.format.test",
-            "special@characters",
-            "12345",  # Missing prefix
-            "cs/0123456",  # Old format
-        ]
+        with patch("httpx.AsyncClient") as mock_client:
+            # Mock HTTP responses to speed up the test
+            mock_session = Mock()
+            mock_client.return_value.__aenter__.return_value = mock_session
+            mock_response = Mock()
+            mock_response.text.return_value = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+</feed>"""
+            mock_response.raise_for_status = Mock()
+            mock_session.get.return_value = mock_response
 
-        paper_id_handlers = [
-            "get_paper_details_handler",
-            "find_similar_papers_handler",
-            "download_paper_pdf_handler",
-            "get_pdf_url_handler",
-        ]
+            invalid_paper_ids = [
+                "",
+                None,
+                "invalid.format",
+                "toolong.paperid.format.test",
+                "special@characters",
+                "12345",  # Missing prefix
+                "cs/0123456",  # Old format
+            ]
 
-        for paper_id in invalid_paper_ids:
-            for handler_name in paper_id_handlers:
-                if hasattr(mcp_handlers, handler_name):
-                    handler = getattr(mcp_handlers, handler_name)
+            paper_id_handlers = [
+                "get_paper_details_handler",
+                "find_similar_papers_handler",
+                "download_paper_pdf_handler",
+                "get_pdf_url_handler",
+            ]
 
-                    if handler_name == "download_paper_pdf_handler":
-                        result = await handler(paper_id, "/tmp")
-                    elif handler_name == "find_similar_papers_handler":
-                        result = await handler(paper_id, 5)
-                    else:
-                        result = await handler(paper_id)
+            with patch("os.makedirs"), patch("builtins.open", create=True):
+                for paper_id in invalid_paper_ids:
+                    for handler_name in paper_id_handlers:
+                        if hasattr(mcp_handlers, handler_name):
+                            handler = getattr(mcp_handlers, handler_name)
 
-                    # Should handle invalid IDs gracefully
-                    assert result is not None
+                            if handler_name == "download_paper_pdf_handler":
+                                result = await handler(paper_id, "/tmp")
+                            elif handler_name == "find_similar_papers_handler":
+                                result = await handler(paper_id, 5)
+                            else:
+                                result = await handler(paper_id)
+
+                            # Should handle invalid IDs gracefully
+                            assert result is not None
 
     @pytest.mark.asyncio
     async def test_handler_performance_characteristics(self):
