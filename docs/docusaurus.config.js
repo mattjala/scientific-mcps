@@ -33,20 +33,6 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
-  // Enhanced metadata for social sharing
-  metadata: [
-    {name: 'description', content: 'Collection of Model Context Protocol (MCP) servers for scientific computing research. Enable AI agents to interact with data analysis tools, HPC resources, and research datasets.'},
-    {name: 'keywords', content: 'MCP, Model Context Protocol, scientific computing, AI agents, data analysis, HPC, research, IOWarp'},
-    {property: 'og:type', content: 'website'},
-    {property: 'og:title', content: 'IOWarp MCPs - Scientific Computing Tools for AI'},
-    {property: 'og:description', content: 'Collection of Model Context Protocol servers for scientific computing research. Enable AI agents to interact with data analysis tools, HPC resources, and research datasets.'},
-    {property: 'og:image', content: 'https://iowarp.github.io/iowarp-mcps/img/iowarp_logo.png'},
-    {property: 'twitter:card', content: 'summary_large_image'},
-    {property: 'twitter:title', content: 'IOWarp MCPs - Scientific Computing Tools for AI'},
-    {property: 'twitter:description', content: 'Collection of Model Context Protocol servers for scientific computing research.'},
-    {property: 'twitter:image', content: 'https://iowarp.github.io/iowarp-mcps/img/iowarp_logo.png'},
-  ],
-
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
@@ -78,6 +64,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // Enhanced metadata for social sharing
+      metadata: [
+        {name: 'description', content: 'Collection of Model Context Protocol (MCP) servers for scientific computing research. Enable AI agents to interact with data analysis tools, HPC resources, and research datasets.'},
+        {name: 'keywords', content: 'MCP, Model Context Protocol, scientific computing, AI agents, data analysis, HPC, research, IOWarp'},
+        {property: 'og:title', content: 'IOWarp MCPs - Scientific Computing Tools for AI'},
+        {property: 'og:description', content: 'Collection of Model Context Protocol servers for scientific computing research.'},
+        {name: 'twitter:card', content: 'summary_large_image'},
+        {name: 'twitter:title', content: 'IOWarp MCPs - Scientific Computing Tools for AI'},
+        {name: 'twitter:description', content: 'Collection of Model Context Protocol servers for scientific computing research.'},
+      ],
       // Social card for link previews
       image: 'img/iowarp_logo.png',
       navbar: {
