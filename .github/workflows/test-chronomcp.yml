@@ -1,0 +1,76 @@
+
+name: Test ChronoLog MCP
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'mcps/Chronolog/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'mcps/Chronolog/**'
+  workflow_dispatch:
+
+jobs:
+  test-chronomcp:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+        
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      
+    - name: Get spack
+      run: |
+        git clone --branch v0.21.2 https://github.com/spack/spack.git
+        source spack/share/spack/setup-env.sh
+        echo "SPACK_ROOT=$PWD/spack" >> $GITHUB_ENV
+        echo "$PWD/spack/bin" >> $GITHUB_PATH
+        
+    - name: Clone ChronoLog repository
+      run: |
+        git clone https://github.com/grc-iit/ChronoLog.git
+        cd ChronoLog
+        git switch develop
+        
+    - name: Install ChronoLog dependencies
+      working-directory: ${{ github.workspace }}/ChronoLog
+      run: |
+        source $SPACK_ROOT/share/spack/setup-env.sh
+        spack env activate -p .
+        # TODO: Cache this spack environment to speed up executions
+        spack install -v
+        
+    - name: Build ChronoLog
+      working-directory: ${{ github.workspace }}/ChronoLog
+      run: ./deploy/local_single_user_deploy.sh --build --build-type Debug --install-dir $GITHUB_WORKSPACE/ChronoLog/install
+        
+    - name: Install ChronoLog
+      working-directory: ${{ github.workspace }}/ChronoLog
+      run: ./deploy/local_single_user_deploy.sh --install --work-dir $GITHUB_WORKSPACE/ChronoLog/install/Debug
+        
+    - name: Start ChronoLog service
+      working-directory: ${{ github.workspace }}/ChronoLog
+      run: ./deploy/local_single_user/deploy.sh -d -k 5 -r 2 --work-dir $GITHUB_WORKSPACE/ChronoLog/install/Debug
+        
+    - name: Create Python client symlink
+      working-directory: ${{ github.workspace }}/ChronoLog/install/Debug/lib
+      run: |
+        rm -f py_chronolog_client.so
+        ln -s py_chronolog_client.cpython-39-x86_64-linux-gnu.so py_chronolog_client.so
+        
+    - name: Install ChronoLog MCP dependencies
+      working-directory: ${{ github.workspace }}/mcps/Chronolog
+      run: uv pip install -e .
+        
+    - name: Run ChronoLog MCP tests
+      working-directory: mcps/Chronolog
+      run: uv run pytest -v

@@ -1,5 +1,5 @@
 # server.py
-import utils.config as config
+
 from capabilities.start_handler    import start_chronolog as _start
 from capabilities.record_handler import record_interaction as _record
 from capabilities.stop_handler     import stop_chronolog  as _stop

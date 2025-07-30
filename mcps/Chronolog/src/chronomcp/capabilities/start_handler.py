@@ -1,5 +1,6 @@
 # capabilities/start_chronolog.py
-import utils.config as config
+
+from chronomcp.utils import config
 
 async def start_chronolog(chronicle_name: str = None, story_name: str = None) -> str:
     chronicle = chronicle_name or config.DEFAULT_CHRONICLE
