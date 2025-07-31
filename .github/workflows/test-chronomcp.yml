@@ -37,7 +37,21 @@ jobs:
         cd ChronoLog
         git switch develop
         
+    - name: Cache Spack Dependencies
+      uses: actions/cache@v4
+      id: spack-cache
+      with:
+        path: |
+          ${{ env.SPACK_ROOT }}/opt
+          ${{ env.SPACK_ROOT }}/var/spack/cache
+          ~/.spack
+          ${{ github.workspace }}/ChronoLog/.spack-env
+        key: chronolog-spack-${{ runner.os }}-${{ hashFiles('ChronoLog/spack.yaml') }}
+        restore-keys: |
+          chronolog-spack-${{ runner.os }}-
+
     - name: Install ChronoLog dependencies
+      if: steps.spack-cache.outputs.cache-hit != 'true'
       working-directory: ${{ github.workspace }}/ChronoLog
       run: |
         source $SPACK_ROOT/share/spack/setup-env.sh
@@ -47,8 +61,14 @@ jobs:
         spack add gcc@13
         spack install gcc@13
         # install everything else
-        # TODO: Cache this spack environment to speed up executions
-        spack install -j -v
+        spack install -j4 -v
+        
+    - name: Setup Spack Environment (Cache Hit)
+      if: steps.spack-cache.outputs.cache-hit == 'true'
+      working-directory: ${{ github.workspace }}/ChronoLog
+      run: |
+        source $SPACK_ROOT/share/spack/setup-env.sh
+        spack env activate -p .
         
     - name: Build ChronoLog
       working-directory: ${{ github.workspace }}/ChronoLog
