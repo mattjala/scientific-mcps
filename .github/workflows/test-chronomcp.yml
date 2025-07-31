@@ -4,12 +4,8 @@ name: Test ChronoLog MCP
 on:
   push:
     branches: [ main, develop ]
-    paths:
-      - 'mcps/Chronolog/**'
   pull_request:
     branches: [ main, develop ]
-    paths:
-      - 'mcps/Chronolog/**'
   workflow_dispatch:
 
 jobs:
@@ -62,19 +58,21 @@ jobs:
         source $SPACK_ROOT/share/spack/setup-env.sh
         spack env activate -p .
         ./deploy/local_single_user_deploy.sh --install --work-dir $GITHUB_WORKSPACE/ChronoLog/install/Debug
-        
+        echo "PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/ChronoLog/install/Debug/lib" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GITHUB_WORKSPACE/ChronoLog/install/Debug/lib" >> $GITHUB_ENV
+
+    - name: Create Python client symlink
+      working-directory: ${{ github.workspace }}/ChronoLog/install/Debug/lib
+      run: |
+        rm -f py_chronolog_client.so
+        ln -s py_chronolog_client.cpython-312-x86_64-linux-gnu.so py_chronolog_client.so
+
     - name: Start ChronoLog service
       working-directory: ${{ github.workspace }}/ChronoLog
       run: |
         source $SPACK_ROOT/share/spack/setup-env.sh
         spack env activate -p .
         ./deploy/local_single_user/deploy.sh -d -k 5 -r 2 --work-dir $GITHUB_WORKSPACE/ChronoLog/install/Debug
-        
-    - name: Create Python client symlink
-      working-directory: ${{ github.workspace }}/ChronoLog/install/Debug/lib
-      run: |
-        rm -f py_chronolog_client.so
-        ln -s py_chronolog_client.cpython-312-x86_64-linux-gnu.so py_chronolog_client.so
         
     - name: Install ChronoLog MCP dependencies
       working-directory: ${{ github.workspace }}/mcps/Chronolog
