@@ -48,7 +48,7 @@ jobs:
         spack install gcc@13
         # install everything else
         # TODO: Cache this spack environment to speed up executions
-        spack install -v
+        spack install -j -v
         
     - name: Build ChronoLog
       working-directory: ${{ github.workspace }}/ChronoLog
