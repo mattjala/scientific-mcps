@@ -59,7 +59,7 @@ jobs:
         # Manually install gcc13 to avoid an incompatibility between gcc14 and libffi
         # https://github.com/mxe/mxe/issues/3082
         spack add gcc@13
-        spack install gcc@13
+        spack install -j4 gcc@13
         # install everything else
         spack install -j4 -v
         
