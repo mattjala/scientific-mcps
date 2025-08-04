@@ -62,11 +62,7 @@ jobs:
         spack add gcc@13
         spack install -j4 gcc@13
         # modify spack config to only use gcc13
-        if [ ! -f ~/linux/compilers.yaml ]; then
-          echo "Error: ~/linux/compilers.yaml does not exist. Spack compilers configuration not found."
-          exit 1
-        fi
-        cat > ~/linux/compilers.yaml << 'EOF'
+        cat > spack.yaml << 'EOF'
         compilers:
           - compiler:
               spec: gcc@=13.2.0
