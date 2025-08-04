@@ -50,17 +50,45 @@ jobs:
         restore-keys: |
           chronolog-spack-${{ runner.os }}-
 
+      # Manually install gcc13 to avoid an incompatibility between gcc14 and libffi
+      # https://github.com/mxe/mxe/issues/3082
+    - name: Setup gcc13
+      if: steps.spack-cache.outputs.cache-hit != 'true'
+      working-directory: ${{ github.workspace }}/ChronoLog
+      run: |
+        # install gcc13
+        source $SPACK_ROOT/share/spack/setup-env.sh
+        spack env activate -p .
+        spack add gcc@13
+        spack install -j4 gcc@13
+        # modify spack config to only use gcc13
+        if [ ! -f ~/linux/compilers.yaml ]; then
+          echo "Error: ~/linux/compilers.yaml does not exist. Spack compilers configuration not found."
+          exit 1
+        fi
+        cat > ~/linux/compilers.yaml << 'EOF'
+        compilers:
+          - compiler:
+              spec: gcc@=13.2.0
+              paths:
+                cc: /usr/bin/gcc
+                cxx: /usr/bin/g++
+                f77: /usr/bin/gfortran
+                fc: /usr/bin/gfortran
+              flags: {}
+              operating_system: ubuntu24
+              target: x86_64
+              modules: []
+              environment: {}
+              extra_rpaths: []
+        EOF
+
     - name: Install ChronoLog dependencies
       if: steps.spack-cache.outputs.cache-hit != 'true'
       working-directory: ${{ github.workspace }}/ChronoLog
       run: |
         source $SPACK_ROOT/share/spack/setup-env.sh
         spack env activate -p .
-        # Manually install gcc13 to avoid an incompatibility between gcc14 and libffi
-        # https://github.com/mxe/mxe/issues/3082
-        spack add gcc@13
-        spack install -j4 gcc@13
-        # install everything else
         spack install -j4 -v
         
     - name: Setup Spack Environment (Cache Hit)
