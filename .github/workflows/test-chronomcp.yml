@@ -62,22 +62,23 @@ jobs:
         spack add gcc@13
         spack install -j4 gcc@13
         # modify spack config to only use gcc13
-        cat > spack.yaml << 'EOF'
-        compilers:
-          - compiler:
-              spec: gcc@=13.2.0
-              paths:
-                cc: /usr/bin/gcc
-                cxx: /usr/bin/g++
-                f77: /usr/bin/gfortran
-                fc: /usr/bin/gfortran
-              flags: {}
-              operating_system: ubuntu24
-              target: x86_64
-              modules: []
-              environment: {}
-              extra_rpaths: []
-        EOF
+        # Append compilers configuration to existing spack.yaml
+        cat >> spack.yaml << 'EOF'
+  compilers:
+    - compiler:
+        spec: gcc@=13.2.0
+        paths:
+          cc: /usr/bin/gcc
+          cxx: /usr/bin/g++
+          f77: /usr/bin/gfortran
+          fc: /usr/bin/gfortran
+        flags: {}
+        operating_system: ubuntu24
+        target: x86_64
+        modules: []
+        environment: {}
+        extra_rpaths: []
+EOF
 
     - name: Install ChronoLog dependencies
       if: steps.spack-cache.outputs.cache-hit != 'true'
