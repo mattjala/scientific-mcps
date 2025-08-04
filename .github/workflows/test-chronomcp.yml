@@ -24,12 +24,19 @@ jobs:
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       
+    - name: Install gcc13 at runner level
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-13 g++-13 gfortran-13
+        
     - name: Get spack
       run: |
         git clone --branch v0.21.2 https://github.com/spack/spack.git
         source spack/share/spack/setup-env.sh
         echo "SPACK_ROOT=$PWD/spack" >> $GITHUB_ENV
         echo "$PWD/spack/bin" >> $GITHUB_PATH
+        # Prevent spack from auto-detecting system compilers (including gcc14)
+        spack compiler remove --all || true
         
     - name: Clone ChronoLog repository
       run: |
@@ -50,20 +57,29 @@ jobs:
         restore-keys: |
           chronolog-spack-${{ runner.os }}-
 
-    - name: Configure spack.yaml for gcc13
+    - name: Configure spack compilers for gcc13
       if: steps.spack-cache.outputs.cache-hit != 'true'
       working-directory: ${{ github.workspace }}/ChronoLog
       run: |
         source $SPACK_ROOT/share/spack/setup-env.sh
         spack env activate -p .
+        # Remove any existing gcc14 compilers that spack may have found
+        spack compiler remove gcc@14 || true
+        # Clear all compilers and start fresh
+        spack compiler list
+        # Only add gcc13 compiler to spack
+        spack compiler add /usr/bin/gcc-13
+        # Verify only gcc13 is available
+        spack compiler list
+        # Install gcc13 through spack for additional dependencies and build consistency
         spack add gcc@13
-        # Manually install gcc13 to avoid an incompatibility between gcc14 and libffi
-        # https://github.com/mxe/mxe/issues/3082
-        source $SPACK_ROOT/share/spack/setup-env.sh
-        spack env activate -p .
         spack install -j4 gcc@13
-        # Append compilers configuration to existing spack.yaml
-        printf '  compilers:\n    - compiler:\n        spec: gcc@=13.2.0\n        paths:\n          cc: /usr/bin/gcc\n          cxx: /usr/bin/g++\n          f77: /usr/bin/gfortran\n          fc: /usr/bin/gfortran\n        flags: {}\n        operating_system: ubuntu24\n        target: x86_64\n        modules: []\n        environment: {}\n        extra_rpaths: []\n' >> spack.yaml
+        # Configure environment to ONLY use gcc13, explicitly exclude gcc14
+        spack config add "packages:all:compiler:[gcc@13]"
+        spack config add "packages:all:variants:~gcc14"
+        # Set gcc13 as the default compiler for this environment
+        spack config add "compilers::gcc@13::environment:CC:/usr/bin/gcc-13"
+        spack config add "compilers::gcc@13::environment:CXX:/usr/bin/g++-13"
 
     - name: Install ChronoLog dependencies
       if: steps.spack-cache.outputs.cache-hit != 'true'
