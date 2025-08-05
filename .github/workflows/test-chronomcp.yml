@@ -103,7 +103,7 @@ jobs:
       run: |
         source $SPACK_ROOT/share/spack/setup-env.sh
         spack env activate -p .
-        ./deploy/local_single_user/deploy.sh -d -k 5 -r 2 --work-dir $GITHUB_WORKSPACE/ChronoLog/install/Debug
+        ./deploy/local_single_user_deploy.sh -d -k 5 -r 2 --work-dir $GITHUB_WORKSPACE/ChronoLog/install/Debug
         
     - name: Install ChronoLog MCP dependencies
       working-directory: ${{ github.workspace }}/mcps/Chronolog
