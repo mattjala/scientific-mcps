@@ -65,6 +65,7 @@ jobs:
         spack env activate -p .
         # specify specific libffi version to avoid gcc14/libffi3.4.4 incompatibility
         spack add libffi@3.4.8
+        spack concretize --force
         spack install -j4 -v
         
     - name: Setup Spack Environment (Cache Hit)
