@@ -63,8 +63,9 @@ jobs:
       run: |
         source $SPACK_ROOT/share/spack/setup-env.sh
         spack env activate -p .
-        # specify specific libffi version to avoid gcc14/libffi3.4.4 incompatibility
-        spack add libffi@3.4.8
+        # Register gcc-13 with Spack and remove any gcc-14 to avoid libffi incompatibility
+        spack compiler find /usr/bin
+        spack compiler remove gcc@14 --all || true
         spack concretize --force
         spack install -j4 -v
         
