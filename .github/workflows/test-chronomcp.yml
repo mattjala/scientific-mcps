@@ -57,36 +57,14 @@ jobs:
         restore-keys: |
           chronolog-spack-${{ runner.os }}-
 
-    - name: Configure spack compilers for gcc13
-      if: steps.spack-cache.outputs.cache-hit != 'true'
-      working-directory: ${{ github.workspace }}/ChronoLog
-      run: |
-        source $SPACK_ROOT/share/spack/setup-env.sh
-        spack env activate -p .
-        # Remove any existing gcc14 compilers that spack may have found
-        spack compiler remove gcc@14 || true
-        # Clear all compilers and start fresh
-        spack compiler list
-        # Only add gcc13 compiler to spack
-        spack compiler add /usr/bin/gcc-13
-        # Verify only gcc13 is available
-        spack compiler list
-        # Install gcc13 through spack for additional dependencies and build consistency
-        spack add gcc@13
-        spack install -j4 gcc@13
-        # Configure environment to ONLY use gcc13, explicitly exclude gcc14
-        spack config add "packages:all:compiler:[gcc@13]"
-        spack config add "packages:all:variants:~gcc14"
-        # Set gcc13 as the default compiler for this environment
-        spack config add "compilers::gcc@13::environment:CC:/usr/bin/gcc-13"
-        spack config add "compilers::gcc@13::environment:CXX:/usr/bin/g++-13"
-
     - name: Install ChronoLog dependencies
       if: steps.spack-cache.outputs.cache-hit != 'true'
       working-directory: ${{ github.workspace }}/ChronoLog
       run: |
         source $SPACK_ROOT/share/spack/setup-env.sh
         spack env activate -p .
+        # specify specific libffi version to avoid gcc14/libffi3.4.4 incompatibility
+        spack add libffi@3.4.8
         spack install -j4 -v
         
     - name: Setup Spack Environment (Cache Hit)
