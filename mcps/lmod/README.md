@@ -122,9 +122,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 ### `module_list`
 **Description**: List all currently loaded environment modules with their versions and status information.
 
-**Parameters**: None
-
-**Returns**: Dictionary with list of loaded modules, count, and module status information.
+**Returns**: dict: Dictionary with list of loaded modules, count, and module status information.
 
 ### `module_avail`
 **Description**: Search for available modules that can be loaded with optional pattern matching and filtering.
@@ -132,7 +130,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 **Parameters**:
 - `pattern` (str, optional): Search pattern with wildcards (e.g., 'python*', 'gcc/*')
 
-**Returns**: Dictionary with available modules matching the search criteria and their descriptions.
+**Returns**: dict: Dictionary with available modules matching the search criteria and their descriptions.
 
 ### `module_show`
 **Description**: Display comprehensive information about a specific module including dependencies and environment changes.
@@ -140,7 +138,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 **Parameters**:
 - `module_name` (str): Name of the module (e.g., 'python/3.9.0')
 
-**Returns**: Dictionary with detailed module information, dependencies, and environment modifications.
+**Returns**: dict: Dictionary with detailed module information, dependencies, and environment modifications.
 
 ### `module_load`
 **Description**: Load one or more environment modules with automatic dependency resolution and conflict detection.
@@ -148,7 +146,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 **Parameters**:
 - `modules` (list): List of module names to load
 
-**Returns**: Dictionary with loading status, any conflicts detected, and environment changes applied.
+**Returns**: dict: Dictionary with loading status, any conflicts detected, and environment changes applied.
 
 ### `module_unload`
 **Description**: Unload one or more currently loaded modules with dependency checking and cleanup.
@@ -156,7 +154,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 **Parameters**:
 - `modules` (list): List of module names to unload
 
-**Returns**: Dictionary with unloading status and environment restoration information.
+**Returns**: dict: Dictionary with unloading status and environment restoration information.
 
 ### `module_swap`
 **Description**: Atomically swap one module for another, handling dependencies and version conflicts automatically.
@@ -165,7 +163,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 - `old_module` (str): Module to unload
 - `new_module` (str): Module to load in its place
 
-**Returns**: Dictionary with swap operation status and any dependency adjustments made.
+**Returns**: dict: Dictionary with swap operation status and any dependency adjustments made.
 
 ### `module_spider`
 **Description**: Search the entire module tree comprehensively with deep hierarchy exploration and metadata extraction.
@@ -173,7 +171,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 **Parameters**:
 - `pattern` (str, optional): Search pattern for comprehensive module discovery
 
-**Returns**: Dictionary with comprehensive search results including hidden modules and dependency information.
+**Returns**: dict: Dictionary with comprehensive search results including hidden modules and dependency information.
 
 ### `module_save`
 **Description**: Save the current set of loaded modules as a named collection for reproducible environments.
@@ -181,7 +179,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 **Parameters**:
 - `collection_name` (str): Name for the saved collection
 
-**Returns**: Dictionary with collection save status and included modules list.
+**Returns**: dict: Dictionary with collection save status and included modules list.
 
 ### `module_restore`
 **Description**: Restore a previously saved module collection with automatic environment configuration.
@@ -189,15 +187,12 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\lmod run lmod-mcp --help
 **Parameters**:
 - `collection_name` (str): Name of the collection to restore
 
-**Returns**: Dictionary with restoration status and any conflicts or missing modules.
+**Returns**: dict: Dictionary with restoration status and any conflicts or missing modules.
 
 ### `module_savelist`
 **Description**: List all saved module collections with creation dates and module counts.
 
-**Parameters**: None
-
-**Returns**: Dictionary with list of saved collections and their metadata information.
-
+**Returns**: dict: Dictionary with list of saved collections and their metadata information.
 ## Examples
 
 ### 1. HPC Development Environment Setup

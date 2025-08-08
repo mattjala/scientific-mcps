@@ -122,32 +122,36 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Chronolog run chronolog-mcp --hel
 ### `start_chronolog`
 **Description**: Connects to ChronoLog, creates a chronicle, and acquires a story handle for logging interactions.
 
-**Parameters**: None
+**Parameters**:
+- `chronicle_name` (str, optional): Name of the chronicle to create or connect to. Defaults to config.DEFAULT_CHRONICLE.
+- `story_name` (str, optional): Name of the story to acquire. Defaults to config.DEFAULT_STORY.
 
-**Returns**: Confirmation message with chronicle and story identifiers.
+**Returns**: str: Confirmation message with chronicle and story identifiers.
 
-### `record_interaction` 
+### `record_interaction`
 **Description**: Logs user messages and LLM responses to the active story with structured event formatting.
 
 **Parameters**:
-- `event` (str): The event name or message content to record
+- `user_message` (str): The user message content to record.
+- `assistant_message` (str): The assistant (LLM) response to record.
 
-**Returns**: Confirmation of successful event logging with timestamp information.
-
-### `retrieve_interaction`
-**Description**: Extracts logged records from specified chronicle and story, generates timestamped output files with filtering options.
-
-**Parameters**: None (uses current session context)
-
-**Returns**: Generated text file with interaction history or error message if no records found.
+**Returns**: str: Confirmation of successful event logging with timestamp information.
 
 ### `stop_chronolog`
 **Description**: Releases the story handle and cleanly disconnects from ChronoLog system.
 
-**Parameters**: None
+**Returns**: str: Confirmation of clean shutdown and resource cleanup.
 
-**Returns**: Confirmation of clean shutdown and resource cleanup.
+### `retrieve_interaction`
+**Description**: Extracts logged records from specified chronicle and story, generates timestamped output files with filtering options.
 
+**Parameters**:
+- `chronicle_name` (str, optional): Name of the chronicle to retrieve from. Defaults to config.DEFAULT_CHRONICLE.
+- `story_name` (str, optional): Name of the story to retrieve from. Defaults to config.DEFAULT_STORY.
+- `start_time` (str, optional): Start time for filtering records (YYYY-MM-DD HH:MM:SS or similar).
+- `end_time` (str, optional): End time for filtering records (YYYY-MM-DD HH:MM:SS or similar).
+
+**Returns**: str: Generated text file with interaction history or error message if no records found.
 ## Examples
 
 ### 1. Session Logging and Analysis

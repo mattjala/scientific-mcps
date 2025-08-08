@@ -125,7 +125,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\HDF5 run hdf5-mcp --help
 **Parameters**:
 - `directory` (str, optional): Path to directory containing HDF5 files (default: "data/")
 
-**Returns**: List of HDF5 files (.h5 and .hdf5 extensions) with file paths and basic metadata information.
+**Returns**: list: List of HDF5 files (.h5 and .hdf5 extensions) with file paths and basic metadata information.
 
 ### `inspect_hdf5`
 **Description**: Inspect HDF5 file structure including detailed analysis of groups, datasets, and attributes for comprehensive data understanding.
@@ -133,7 +133,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\HDF5 run hdf5-mcp --help
 **Parameters**:
 - `filename` (str): Absolute path to HDF5 file
 
-**Returns**: Detailed structure information including group hierarchy, dataset properties, attribute metadata, and data organization.
+**Returns**: dict: Detailed structure information including group hierarchy, dataset properties, attribute metadata, and data organization.
 
 ### `preview_hdf5`
 **Description**: Preview first N elements of each dataset in an HDF5 file with configurable data sampling for efficient data exploration.
@@ -142,7 +142,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\HDF5 run hdf5-mcp --help
 - `filename` (str): Absolute path to HDF5 file
 - `count` (int, optional): Number of elements to preview from each dataset (default: 10)
 
-**Returns**: Preview data from all datasets with specified element count, including data types and sample values.
+**Returns**: dict: Preview data from all datasets with specified element count, including data types and sample values.
 
 ### `read_all_hdf5`
 **Description**: Read every element of every dataset in an HDF5 file with complete data extraction and memory-efficient processing.
@@ -150,8 +150,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\HDF5 run hdf5-mcp --help
 **Parameters**:
 - `filename` (str): Absolute path to HDF5 file
 
-**Returns**: Complete dataset contents with all elements, maintaining original data structure and types.
-
+**Returns**: dict: Complete dataset contents with all elements, maintaining original data structure and types.
 ## Examples
 
 ### 1. Scientific Data Structure Analysis

@@ -17,22 +17,28 @@ jobs:
             path: "mcps/Adios"
           - name: "Arxiv" 
             path: "mcps/Arxiv"
+          - name: "Chronolog"
+            path: "mcps/Chronolog"
           - name: "Compression"
             path: "mcps/Compression"
           - name: "Darshan"
             path: "mcps/Darshan"
           - name: "HDF5"
             path: "mcps/HDF5"
+          - name: "Jarvis"
+            path: "mcps/Jarvis"
           - name: "lmod"
             path: "mcps/lmod"
+          - name: "Node_Hardware"
+            path: "mcps/Node_Hardware"
           - name: "Pandas"
             path: "mcps/Pandas"
           - name: "Parallel_Sort"
             path: "mcps/Parallel_Sort"
-          - name: "Plot"
-            path: "mcps/Plot"
           - name: "parquet"
             path: "mcps/parquet"
+          - name: "Plot"
+            path: "mcps/Plot"
           - name: "Slurm"
             path: "mcps/Slurm"
 
@@ -50,6 +56,12 @@ jobs:
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       
+    - name: Install Slurm dependencies
+      if: matrix.mcp.name == 'Slurm'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y slurm-wlm
+
     - name: Run tests for ${{ matrix.mcp.name }}
       working-directory: ${{ matrix.mcp.path }}
       run: |

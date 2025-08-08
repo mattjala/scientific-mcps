@@ -126,7 +126,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 **Parameters**:
 - `log_file_path` (str): Absolute path to the .darshan log file
 
-**Returns**: Dictionary with job information, modules detected, and file count statistics.
+**Returns**: dict: Dictionary with job information, modules detected, and file count statistics.
 
 ### `get_job_summary`
 **Description**: Get comprehensive job-level summary including runtime statistics and I/O performance overview.
@@ -134,7 +134,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 **Parameters**:
 - `log_file_path` (str): Path to the Darshan log file
 
-**Returns**: Dictionary with runtime metrics, process information, and I/O volume statistics.
+**Returns**: dict: Dictionary with runtime metrics, process information, and I/O volume statistics.
 
 ### `analyze_file_access_patterns`
 **Description**: Analyze file access patterns to understand application I/O behavior and optimization opportunities.
@@ -143,7 +143,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 - `log_file_path` (str): Path to the Darshan log file
 - `file_pattern` (str, optional): Filter files by pattern (e.g., '*.dat', '/scratch/*')
 
-**Returns**: Dictionary with access pattern analysis including sequential vs random access statistics.
+**Returns**: dict: Dictionary with access pattern analysis including sequential vs random access statistics.
 
 ### `get_io_performance_metrics`
 **Description**: Extract detailed I/O performance metrics including bandwidth, IOPS, and request size analysis.
@@ -151,7 +151,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 **Parameters**:
 - `log_file_path` (str): Path to the Darshan log file
 
-**Returns**: Dictionary with comprehensive performance metrics and throughput analysis.
+**Returns**: dict: Dictionary with comprehensive performance metrics and throughput analysis.
 
 ### `analyze_posix_operations`
 **Description**: Analyze POSIX system call patterns including open, read, write, and seek operations.
@@ -159,7 +159,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 **Parameters**:
 - `log_file_path` (str): Path to the Darshan log file
 
-**Returns**: Dictionary with POSIX operation statistics and system call analysis.
+**Returns**: dict: Dictionary with POSIX operation statistics and system call analysis.
 
 ### `analyze_mpiio_operations`
 **Description**: Analyze MPI-IO operations including collective vs independent I/O patterns and performance.
@@ -167,7 +167,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 **Parameters**:
 - `log_file_path` (str): Path to the Darshan log file
 
-**Returns**: Dictionary with MPI-IO operation analysis and collective I/O performance metrics.
+**Returns**: dict: Dictionary with MPI-IO operation analysis and collective I/O performance metrics.
 
 ### `identify_io_bottlenecks`
 **Description**: Automatically identify potential I/O performance bottlenecks and optimization opportunities.
@@ -175,7 +175,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 **Parameters**:
 - `log_file_path` (str): Path to the Darshan log file
 
-**Returns**: Dictionary with identified performance issues and recommended optimizations.
+**Returns**: dict: Dictionary with identified performance issues and recommended optimizations.
 
 ### `get_timeline_analysis`
 **Description**: Generate temporal analysis of I/O activity to understand performance patterns over time.
@@ -184,7 +184,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 - `log_file_path` (str): Path to the Darshan log file
 - `time_resolution` (str): Time resolution for analysis (e.g., '1s', '100ms')
 
-**Returns**: Dictionary with timeline analysis and temporal I/O patterns.
+**Returns**: dict: Dictionary with timeline analysis and temporal I/O patterns.
 
 ### `compare_darshan_logs`
 **Description**: Compare two Darshan log files to identify performance differences and optimization results.
@@ -194,7 +194,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 - `log_file_2` (str): Path to the second log file
 - `comparison_metrics` (list): List of metrics to compare ['bandwidth', 'iops', 'file_count']
 
-**Returns**: Dictionary with comparative analysis and performance delta identification.
+**Returns**: dict: Dictionary with comparative analysis and performance delta identification.
 
 ### `generate_io_summary_report`
 **Description**: Generate comprehensive I/O analysis report with detailed metrics and recommendations.
@@ -203,8 +203,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Darshan run darshan-mcp --help
 - `log_file_path` (str): Path to the Darshan log file
 - `include_visualizations` (bool): Whether to include visualization data in the report
 
-**Returns**: Dictionary with complete I/O analysis report and performance insights.
-
+**Returns**: dict: Dictionary with complete I/O analysis report and performance insights.
 ## Examples
 
 ### 1. HPC Application Performance Analysis

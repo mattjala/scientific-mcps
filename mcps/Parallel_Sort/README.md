@@ -125,7 +125,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `output_file` (str, optional): Path for sorted output file
 - `reverse` (bool, optional): Sort in descending order (default: False)
 
-**Returns**: Dictionary with sorting results, processed line count, and execution time.
+**Returns**: dict: Dictionary with sorting results, processed line count, and execution time.
 
 ### `parallel_sort_large_file`
 **Description**: Sort large log files using parallel processing with chunked approach for memory efficiency.
@@ -136,7 +136,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `chunk_size_mb` (int, optional): Chunk size in MB (default: 100)
 - `num_workers` (int, optional): Number of worker processes (default: CPU count)
 
-**Returns**: Dictionary with sorting results, performance metrics, and memory usage.
+**Returns**: dict: Dictionary with sorting results, performance metrics, and memory usage.
 
 ### `analyze_log_statistics`
 **Description**: Perform comprehensive statistical analysis of log files including temporal patterns and log levels.
@@ -145,7 +145,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `log_file` (str): Path to log file
 - `include_patterns` (bool, optional): Include pattern analysis (default: True)
 
-**Returns**: Dictionary with statistics, temporal analysis, log level distribution, and quality metrics.
+**Returns**: dict: Dictionary with statistics, temporal analysis, log level distribution, and quality metrics.
 
 ### `detect_log_patterns`
 **Description**: Detect patterns, anomalies, and trends in log files for proactive issue identification.
@@ -155,7 +155,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `pattern_types` (list, optional): Types of patterns to detect
 - `sensitivity` (str, optional): Detection sensitivity ('low', 'medium', 'high')
 
-**Returns**: Dictionary with detected patterns, anomalies, error clusters, and trend analysis.
+**Returns**: dict: Dictionary with detected patterns, anomalies, error clusters, and trend analysis.
 
 ### `filter_logs`
 **Description**: Apply multiple filter conditions to log files with complex logical operations.
@@ -166,7 +166,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `logical_operator` (str, optional): Logical operator between filters ('AND', 'OR')
 - `output_file` (str, optional): Path for filtered output
 
-**Returns**: Dictionary with filtered results and applied filter summary.
+**Returns**: dict: Dictionary with filtered results and applied filter summary.
 
 ### `filter_by_time_range`
 **Description**: Filter log entries within a specific time range.
@@ -177,7 +177,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `end_time` (str): End timestamp (YYYY-MM-DD HH:MM:SS)
 - `output_file` (str, optional): Path for filtered output
 
-**Returns**: Dictionary with filtered entries and time range statistics.
+**Returns**: dict: Dictionary with filtered entries and time range statistics.
 
 ### `filter_by_log_level`
 **Description**: Filter log entries by log level (ERROR, WARN, INFO, DEBUG, etc.).
@@ -187,7 +187,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `log_levels` (list): List of log levels to include
 - `output_file` (str, optional): Path for filtered output
 
-**Returns**: Dictionary with filtered entries and log level distribution.
+**Returns**: dict: Dictionary with filtered entries and log level distribution.
 
 ### `filter_by_keyword`
 **Description**: Filter log entries containing specific keywords with advanced matching options.
@@ -199,7 +199,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `logical_operator` (str, optional): Operator between keywords ('AND', 'OR')
 - `output_file` (str, optional): Path for filtered output
 
-**Returns**: Dictionary with filtered entries and keyword match statistics.
+**Returns**: dict: Dictionary with filtered entries and keyword match statistics.
 
 ### `apply_filter_preset`
 **Description**: Apply predefined filter presets for common log analysis scenarios.
@@ -209,49 +209,42 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Parallel_Sort run parallel-sort-m
 - `preset_name` (str): Preset name ('errors_only', 'warnings_and_errors', 'connection_issues', etc.)
 - `output_file` (str, optional): Path for filtered output
 
-**Returns**: Dictionary with filtered results and preset configuration details.
+**Returns**: dict: Dictionary with filtered results and preset configuration details.
 
 ### `export_to_json`
-**Description**: Export log processing results to JSON format with optional metadata.
+**Description**: Export results to JSON format.
 
 **Parameters**:
-- `data` (dict): Data to export
-- `output_file` (str): Path for JSON output file
-- `include_metadata` (bool, optional): Include processing metadata (default: True)
+- `data` (dict): Parameter for data
+- `include_metadata` (bool, optional): Parameter for include_metadata (default: True)
 
-**Returns**: Dictionary with export results and file information.
+**Returns**: Dictionary with JSON export results
 
 ### `export_to_csv`
-**Description**: Export log data to CSV format with structured columns.
+**Description**: Export results to CSV format.
 
 **Parameters**:
-- `log_entries` (list): List of log entries to export
-- `output_file` (str): Path for CSV output file
-- `columns` (list, optional): Column names to include
+- `data` (dict): Parameter for data
+- `include_headers` (bool, optional): Parameter for include_headers (default: True)
 
-**Returns**: Dictionary with export results and CSV structure information.
+**Returns**: Dictionary with CSV export results
 
 ### `export_to_text`
-**Description**: Export log data to plain text format with optional processing summary.
+**Description**: Export results to text format.
 
 **Parameters**:
-- `log_entries` (list): List of log entries to export
-- `output_file` (str): Path for text output file
-- `include_summary` (bool, optional): Include processing summary (default: False)
+- `data` (dict): Parameter for data
+- `include_summary` (bool, optional): Parameter for include_summary (default: True)
 
-**Returns**: Dictionary with export results and file statistics.
+**Returns**: Dictionary with text export results
 
 ### `generate_summary_report`
-**Description**: Generate comprehensive summary reports with statistics and analysis.
+**Description**: Generate a summary report.
 
 **Parameters**:
-- `log_file` (str): Path to log file
-- `output_file` (str): Path for report output
-- `report_format` (str, optional): Report format ('text', 'json', 'html')
-- `include_charts` (bool, optional): Include visual charts (default: False)
+- `data` (dict): Parameter for data
 
-**Returns**: Dictionary with report generation results and summary statistics.
-
+**Returns**: Dictionary with summary report
 ## Examples
  
 ### 1. Large Log File Sorting and Analysis

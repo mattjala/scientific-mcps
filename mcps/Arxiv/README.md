@@ -180,7 +180,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Arxiv run arxiv-mcp --help
 **Parameters**:
 - `start_date` (str): Start date in YYYY-MM-DD format
 - `end_date` (str): End date in YYYY-MM-DD format
-- `category` (str, optional): Optional category filter (e.g., 'cs.AI')
+- `category` (str, optional, optional): Optional category filter (e.g., 'cs.AI')
 - `max_results` (int, optional): Maximum number of results to return (default: 20)
 
 **Returns**: Dictionary with papers published within date range with temporal metadata and category information.
@@ -215,28 +215,27 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Arxiv run arxiv-mcp --help
 
 **Parameters**:
 - `arxiv_id` (str): ArXiv paper ID (e.g., '2301.12345' or 'cs/0501001')
-- `download_path` (str, optional): Optional path to save the PDF
+- `download_path` (str, optional, optional): Optional path to save the PDF
 
-**Returns**: Dictionary with download information including file path and download status.
+**Returns**: Dictionary with download information.
 
 ### `get_pdf_url`
-**Description**: Get the direct PDF URL for a paper without downloading for web-based access and linking.
+**Description**: Get PDF URL for an ArXiv paper.
 
 **Parameters**:
-- `arxiv_id` (str): ArXiv paper ID (e.g., '2301.12345' or 'cs/0501001')
+- `arxiv_id` (str): Parameter for arxiv_id
 
-**Returns**: Dictionary with PDF URL information and access metadata.
+**Returns**: Dictionary with PDF URL information
 
 ### `download_multiple_pdfs`
-**Description**: Download multiple PDFs concurrently with rate limiting and progress tracking for bulk operations.
+**Description**: Download multiple PDFs concurrently.
 
 **Parameters**:
-- `arxiv_ids_json` (str): JSON string containing list of ArXiv IDs
-- `download_path` (str, optional): Optional path to save PDFs
-- `max_concurrent` (int, optional): Maximum number of concurrent downloads (default: 3)
+- `arxiv_ids_json` (str): Parameter for arxiv_ids_json
+- `download_path` (Any, optional): Parameter for download_path
+- `max_concurrent` (int, optional): Parameter for max_concurrent (default: 3)
 
-**Returns**: Dictionary with download results including success/failure status for each paper.
-
+**Returns**: Dictionary with download results
 ## Examples
 
 ### 1. Academic Research Discovery

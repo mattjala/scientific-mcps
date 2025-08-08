@@ -1,292 +1,306 @@
-# Plot MCP Server
-[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![UV](https://img.shields.io/badge/uv-package%20manager-green.svg)](https://docs.astral.sh/uv/)
-[![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-orange.svg)](https://github.com/modelcontextprotocol)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+# Plot MCP - Advanced Data Visualization for LLMs
 
-A comprehensive Model Context Protocol (MCP) server for advanced data visualization and plotting operations. This server enables LLMs to create professional-quality plots from various data sources with support for multiple plot types, data formats, and intelligent data handling.
 
-## Key Features
+## Description
 
-- **Multiple Plot Types**  
-  Creates line plots, bar charts, scatter plots, histograms, and correlation heatmaps with professional styling and customization options.
+Plot MCP is a Model Context Protocol server that enables LLMs to create professional data visualizations from CSV and Excel files with intelligent data processing capabilities. The server automatically handles data cleaning, type inference, and missing value processing while supporting multiple visualization types including line plots, bar charts, scatter plots, histograms, and correlation heatmaps.
 
-- **Smart Data Handling**  
-  Automatically cleans data, handles missing values, and performs intelligent aggregation for optimal visualization results.
 
-- **Format Support**  
-  Works with CSV and Excel files (.csv, .xlsx, .xls) with automatic format detection and data type inference.
+## 🛠️ Installation
 
-- **Advanced Analytics**  
-  Provides comprehensive data inspection, column analysis, and statistical insights for data exploration.
-
-- **High-Quality Output**  
-  Generates professional 300 DPI plots with customizable styling, titles, and output formats.
-
-- **Standardized MCP Interface**  
-  Exposes all functionality via the MCP JSON-RPC protocol for seamless integration with language models.
-
-## Capabilities
-
-1. **data_info**: Get comprehensive information about data files including columns, data types, shape, and preview.
-
-2. **line_plot**: Create line plots for time series or continuous data visualization with customizable parameters.
-
-3. **bar_plot**: Create bar charts with automatic data aggregation and smart categorical grouping.
-
-4. **scatter_plot**: Create scatter plots for correlation analysis and pattern identification.
-
-5. **histogram_plot**: Create histograms for distribution analysis with configurable bins and styling.
-
-6. **heatmap_plot**: Create correlation heatmaps for numeric data with automatic column selection.
-
----
-
-## Prerequisites
+### Requirements
 
 - Python 3.10 or higher
-- [uv](https://docs.astral.sh/uv/) package manager
-- Linux/macOS environment (for optimal compatibility)
+- [uv](https://docs.astral.sh/uv/) package manager (recommended)
 
-## Setup
+<details>
+<summary><b>Install in Cursor</b></summary>
 
-### 1. Navigate to Plot Directory
-```bash
-cd /path/to/scientific-mcps/Plot
-```
+Go to: `Settings` -> `Cursor Settings` -> `MCP` -> `Add new global MCP server`
 
-### 2. Install Dependencies
-Using UV (recommended):
-```bash
-uv sync
-```
-
-Using pip:
-```bash
-pip install -e .
-```
-
-**Run the MCP Server directly:**
-
-   ```bash
-   # Using uv (recommended)
-   uv run plot-mcp
-   
-   # Or run the server module directly
-   uv run python -m src.server
-   ```
-   
-   This will create a `.venv/` folder, install all required packages, and run the server directly.
-
---- 
-
-## Running the Server with Different Types of Clients:
-
-### Running the Server with the WARP Client
-To interact with the Plot MCP server, use the main `wrp.py` client. You will need to configure it to point to the Plot server.
-
-1.  **Configure:** Ensure that `Plot` is listed in the `MCP` section of your chosen configuration file (e.g., in `bin/confs/Gemini.yaml` or `bin/confs/Ollama.yaml`).
-    ```yaml
-    # In bin/confs/Gemini.yaml
-    MCP:
-      - Plot
-      # - Adios
-      # - HDF5
-    ```
-
-2.  **Run:** Start the client from the repository root with your desired configuration:
-    ```bash
-    # Example using the Gemini configuration 
-    python3 bin/wrp.py --conf=bin/confs/Gemini.yaml
-    ```
-    
-    For detailed setup with local LLMs and other providers, see the [Complete Installation Guide](../bin/docs/Installation.md).
-
-### Running the Server on Claude Command Line Interface Tool.
-
-1. Install the Claude Code using NPM,
-Install [NodeJS 18+](https://nodejs.org/en/download), then run:
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-2. Running the server:
-```bash
-claude add mcp plot -- uv --directory ~/scientific-mcps/Plot run plot-mcp
-```
-
-### Running the Server on open source LLM client (Claude, Copilot, etc.)
-
-**Put the following in settings.json of any open source LLMs like Claude or Microsoft Co-pilot:**
+Pasting the following configuration into your Cursor `~/.cursor/mcp.json` file is the recommended approach. You may also install in a specific project by creating `.cursor/mcp.json` in your project folder. See [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more info.
 
 ```json
-"plot-mcp": {
-    "command": "uv",
-    "args": [
-        "--directory",
-        "path/to/directory/scientific-mcps/Plot/",
-        "run",
-        "plot-mcp"
-    ]
+{
+  "mcpServers": {
+    "plot-mcp": {
+      "command": "uvx",
+      "args": ["iowarp-mcps", "plot"]
+    }
+  }
 }
 ```
 
----
+</details>
 
+<details>
+<summary><b>Install in VS Code</b></summary>
 
+Add this to your VS Code MCP config file. See [VS Code MCP docs](https://code.visualstudio.com/docs/copilot/chat/mcp-servers) for more info.
+
+```json
+"mcp": {
+  "servers": {
+    "plot-mcp": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["iowarp-mcps", "plot"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><b>Install in Claude Code</b></summary>
+
+Run this command. See [Claude Code MCP docs](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/tutorials#set-up-model-context-protocol-mcp) for more info.
+
+```sh
+claude mcp add plot-mcp -- uvx iowarp-mcps plot
+```
+
+</details>
+
+<details>
+<summary><b>Install in Claude Desktop</b></summary>
+
+Add this to your Claude Desktop `claude_desktop_config.json` file. See [Claude Desktop MCP docs](https://modelcontextprotocol.io/quickstart/user) for more info.
+
+```json
+{
+  "mcpServers": {
+    "plot-mcp": {
+      "command": "uvx",
+      "args": ["iowarp-mcps", "plot"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><b>Manual Setup</b></summary>
+
+**Linux/macOS:**
+```bash
+CLONE_DIR=$(pwd)
+git clone https://github.com/iowarp/iowarp-mcps.git
+uv --directory=$CLONE_DIR/iowarp-mcps/mcps/Plot run plot-mcp --help
+```
+
+**Windows CMD:**
+```cmd
+set CLONE_DIR=%cd%
+git clone https://github.com/iowarp/iowarp-mcps.git
+uv --directory=%CLONE_DIR%\iowarp-mcps\mcps\Plot run plot-mcp --help
+```
+
+**Windows PowerShell:**
+```powershell
+$env:CLONE_DIR=$PWD
+git clone https://github.com/iowarp/iowarp-mcps.git
+uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Plot run plot-mcp --help
+```
+
+</details>
+
+## Capabilities
+
+### `line_plot`
+**Description**: Create a line plot from data file with comprehensive visualization options.
+
+**Parameters**:
+- `file_path` (str): Parameter for file_path
+- `x_column` (str): Parameter for x_column
+- `y_column` (str): Parameter for y_column
+- `title` (str, optional): Parameter for title (default: Line Plot)
+- `output_path` (str, optional): Parameter for output_path (default: line_plot.png)
+
+**Returns**: Dictionary containing: - plot_info: Details about the generated plot including dimensions and format - data_summary: Statistical summary of the plotted data - file_details: Information about the output file size and location - visualization_stats: Metrics about data points and trends
+
+### `bar_plot`
+**Description**: Create a bar plot from data file with comprehensive customization options.
+
+**Parameters**:
+- `file_path` (str): Parameter for file_path
+- `x_column` (str): Parameter for x_column
+- `y_column` (str): Parameter for y_column
+- `title` (str, optional): Parameter for title (default: Bar Plot)
+- `output_path` (str, optional): Parameter for output_path (default: bar_plot.png)
+
+**Returns**: Dictionary containing: - plot_info: Details about the generated bar chart including bar count and styling - data_summary: Statistical summary of the categorical and numerical data - file_details: Information about the output file size and location - visualization_stats: Metrics about data distribution and categories
+
+### `scatter_plot`
+**Description**: Create a scatter plot from data file with advanced correlation analysis.
+
+**Parameters**:
+- `file_path` (str): Parameter for file_path
+- `x_column` (str): Parameter for x_column
+- `y_column` (str): Parameter for y_column
+- `title` (str, optional): Parameter for title (default: Scatter Plot)
+- `output_path` (str, optional): Parameter for output_path (default: scatter_plot.png)
+
+**Returns**: Dictionary containing: - plot_info: Details about the generated scatter plot including point count and styling - correlation_stats: Statistical correlation metrics and trend analysis - data_summary: Statistical summary of both x and y variables - file_details: Information about the output file size and location
+
+### `histogram_plot`
+**Description**: Create a histogram from data file with advanced statistical analysis.
+
+**Parameters**:
+- `file_path` (str): Parameter for file_path
+- `column` (str): Parameter for column
+- `bins` (int, optional): Parameter for bins (default: 30)
+- `title` (str, optional): Parameter for title (default: Histogram)
+- `output_path` (str, optional): Parameter for output_path (default: histogram.png)
+
+**Returns**: Dictionary containing: - plot_info: Details about the generated histogram including bin information - distribution_stats: Statistical metrics including mean, median, mode, and standard deviation - data_summary: Comprehensive summary of the data distribution - file_details: Information about the output file size and location
+
+### `heatmap_plot`
+**Description**: Create a heatmap from data file with advanced correlation visualization.
+
+**Parameters**:
+- `file_path` (str): Parameter for file_path
+- `title` (str, optional): Parameter for title (default: Heatmap)
+- `output_path` (str, optional): Parameter for output_path (default: heatmap.png)
+
+**Returns**: Dictionary containing: - plot_info: Details about the generated heatmap including matrix dimensions - correlation_matrix: Full correlation matrix with statistical significance - data_summary: Statistical summary of all numerical variables - file_details: Information about the output file size and location
+
+### `data_info`
+**Description**: Get comprehensive data file information with detailed analysis.
+
+**Parameters**:
+- `file_path` (str): Parameter for file_path
+
+**Returns**: Dictionary containing: - data_schema: Column names, data types, and null value analysis - data_quality: Missing values, duplicates, and data consistency metrics - statistical_summary: Basic statistics for numerical and categorical columns - visualization_recommendations: Suggested plot types based on data characteristics
 ## Examples
 
-**Note: Use absolute paths for all file operations to ensure proper file access.**
-
-1. **Create a line plot from time series data**
-
-   ```python
-   # Plot temperature trends over time
-   result = line_plot("/data/temperature.csv", "date", "temperature", "Temperature Trends")
-   ```
-
-2. **Generate comprehensive data analysis**
-
-   ```python
-   # Get detailed information about your dataset
-   info = data_info("/data/sales.csv")
-   ```
-
-3. **Create multiple visualizations for data exploration**
-
-   ```python
-   # Create scatter plot for correlation analysis
-   scatter = scatter_plot("/data/sales.csv", "price", "quantity", "Price vs Quantity")
-   
-   # Generate histogram for distribution analysis
-   hist = histogram_plot("/data/sales.csv", "revenue", bins=50, "Revenue Distribution")
-   
-   # Create correlation heatmap
-   heatmap = heatmap_plot("/data/sales.csv", "Sales Correlation Matrix")
-   ```
-
-4. **Bar chart with automatic data aggregation**
-
-   ```python
-   # Create bar chart with smart categorical grouping
-   bar = bar_plot("/data/categories.csv", "category", "sales", "Sales by Category")
-   ```
-
-**For detailed examples and use cases, see the [capability_test.py](capability_test.py) file.**
-
-## Project Structure
-```text
-Plot/
-├── pyproject.toml                 # Project metadata & dependencies
-├── pytest.ini                    # Test configuration
-├── README.md                      # Project documentation
-├── capability_test.py             # Comprehensive functionality tests
-├── uv.lock                        # Dependency lock file
-├── data/                          # Sample data directory
-│   ├── temperature.csv           # Global temperature data (48,470 records)
-│   └── sample_data.csv           # Simple test data (10 records)
-├── output/                        # Generated plots directory
-├── src/                           # Source code directory (restructured)
-│   ├── __init__.py                # Package init
-│   ├── server.py                  # Main MCP server with FastMCP and direct implementation calls
-│   └── implementation/            # Implementation modules
-│       ├── __init__.py
-│       └── plot_capabilities.py   # Core plotting functions
-├── tests/                         # Comprehensive test suite
-│   ├── __init__.py
-│   ├── test_capabilities.py       # Unit tests for plotting capabilities
-│   ├── test_handlers.py           # Tests for plotting functions
-│   ├── test_integration.py        # Integration tests
-│   ├── test_plot_mcp.py           # Plot-specific MCP tests
-│   └── test_server.py             # Server functionality tests
-└── .venv/                         # Virtual environment (created by uv sync)
+### 1. Data Exploration and Analysis
+```
+I have a CSV file at /data/sales_data.csv with sales information. Can you first analyze the data structure and then create appropriate visualizations to show sales trends over time?
 ```
 
-## Data Types Support
+**Tools called:**
+- `data_info` - Analyze the dataset structure
+- `line_plot` - Create time-series plots showing sales trends
 
-The server supports various data types for visualization:
-- **Numeric types**: int, float, double for statistical plots
-- **Categorical types**: string, object for grouping and categorization
-- **Temporal types**: datetime, date for time series visualization
-- **Boolean types**: bool for binary analysis
-- **Mixed types**: Automatic handling of heterogeneous datasets
+This prompt will:
+- Use `data_info` to analyze the dataset structure
+- Create time-series plots using `line_plot` showing sales trends
+- Provide statistical insights about the data
 
-## Plot Types and Features
+<!-- **Output:** -->
+<!-- Add your output images here -->
+<!-- ![Data Info Output](images/example1_data_info.png) -->
+<!-- ![Sales Trends Line Plot](images/example1_sales_trends.png) -->
 
-Supported plot types with advanced features:
-- **Line plots** - Time series analysis with trend lines
-- **Bar charts** - Categorical comparisons with automatic aggregation
-- **Scatter plots** - Correlation analysis with regression lines
-- **Histograms** - Distribution analysis with customizable binning
-- **Heatmaps** - Correlation matrices with color coding
-- **Box plots** - Statistical distribution analysis (future enhancement)
-
-## Testing
-
-### Run Full Test Suite
-```bash
-# Run all unit and integration tests
-uv run pytest tests/ -v
-
-# Run specific test files
-uv run pytest tests/test_capabilities.py -v     # Core plotting functionality tests
-uv run pytest tests/test_handlers.py -v        # MCP handler tests
-uv run pytest tests/test_integration.py -v     # Integration tests
-uv run pytest tests/test_plot_mcp.py -v        # Plot-specific MCP tests
-uv run pytest tests/test_server.py -v          # Server functionality tests
-
-# Run tests with coverage
-uv run pytest tests/ --cov=src --cov-report=html
+### 2. Comparative Analysis with Multiple Charts
+```
+Using the file /data/survey_results.csv, create a comprehensive analysis showing:
+1. Age distribution of respondents (histogram)
+2. Correlation between satisfaction scores (heatmap)  
+3. Department vs average salary comparison (bar chart)
 ```
 
-## Error Handling
+**Tools called:**
+- `histogram_plot` - Age distribution of respondents
+- `heatmap_plot` - Correlation between satisfaction scores
+- `bar_plot` - Department vs average salary comparison
 
-The server provides comprehensive error handling with:
-- Detailed error messages for debugging
-- Error type classification for different failure modes
-- Validation for file paths and data formats
-- Graceful handling of large datasets
-- Column validation and data type checking errors
+This prompt will:
+- Generate multiple complementary visualizations
+- Provide statistical analysis for each chart type
+- Show data relationships and distributions
+- Create professional publication-ready plots
 
-## Performance Features
+<!-- **Output:** -->
+<!-- Add your output images here -->
+<!-- ![Age Distribution Histogram](images/example2_age_histogram.png) -->
+<!-- ![Satisfaction Scores Heatmap](images/example2_satisfaction_heatmap.png) -->
+<!-- ![Department Salary Comparison](images/example2_department_salary.png) -->
 
-- **Memory optimization** for large datasets
-- **Intelligent data sampling** for performance
-- **Lazy loading** of data files
-- **Automatic data cleaning** and preprocessing
-- **Smart aggregation** for categorical data
-- **Efficient plot rendering** with matplotlib optimization
+### 3. Scientific Data Visualization
+```
+I have temperature measurement data in /data/temperature.csv. Create a scatter plot showing the relationship between ambient temperature and device performance, and add a trend analysis.
+```
 
-## Dependencies
+**Tools called:**
+- `scatter_plot` - Relationship between ambient temperature and device performance
 
-Key dependencies managed through `pyproject.toml`:
-- `fastmcp>=0.1.0` - FastMCP framework for MCP server implementation
-- `pandas>=1.5.0` - Data manipulation and analysis library
-- `matplotlib>=3.6.0` - Primary plotting library for visualization
-- `seaborn>=0.12.0` - Statistical visualization enhancements
-- `openpyxl>=3.0.0` - Excel file support (.xlsx)
-- `numpy<2.0.0` - Numerical computing (version pinned for compatibility)
-- `rich>=13.0.0` - Rich text and beautiful formatting
-- `tabulate>=0.9.0` - Table formatting utilities
-- `pytest>=7.2.0` - Testing framework with comprehensive test coverage
+This prompt will:
+- Create correlation analysis between variables using `scatter_plot`
+- Generate scatter plot with trend lines
+- Provide statistical correlation metrics
+- Include uncertainty analysis if applicable
 
-### Development Dependencies
-- `pytest-cov>=4.0.0` - Test coverage reporting
-- `black>=23.0.0` - Code formatting
-- `isort>=5.12.0` - Import sorting
-- `mypy>=1.7.0` - Type checking
-- `ruff>=0.1.0` - Fast Python linter
+<!-- **Output:** -->
+<!-- Add your output images here -->
+<!-- ![Temperature vs Performance Scatter Plot](images/example3_temperature_scatter.png) -->
 
-## Contributing
+### 4. Business Intelligence Dashboard
+```
+From /data/quarterly_metrics.xlsx, create visualizations showing:
+- Revenue trends by quarter (line plot)
+- Performance metrics distribution (histogram)
+- Regional comparison (bar chart)
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass: `uv run pytest`
-5. Submit a pull request
+**Tools called:**
+- `line_plot` - Revenue trends by quarter
+- `histogram_plot` - Performance metrics distribution
+- `bar_plot` - Regional comparison
 
-## License
+This prompt will:
+- Handle Excel file format automatically
+- Create multiple business-focused visualizations
+- Provide executive summary statistics
+- Generate dashboard-style layouts
 
-This project is part of the Scientific MCPs collection and follows the same licensing terms.
+<!-- **Output:** -->
+<!-- Add your output images here -->
+<!-- ![Revenue Trends Line Plot](images/example4_revenue_trends.png) -->
+<!-- ![Performance Metrics Histogram](images/example4_performance_histogram.png) -->
+<!-- ![Regional Comparison Bar Chart](images/example4_regional_comparison.png) -->
 
+### 5. Research Data Publication
+```
+Using /data/experiment_results.csv, create publication-quality figures showing experimental conditions vs outcomes with proper error handling and statistical annotations.
+```
+
+**Tools called:**
+- `data_info` - Analyze experimental data structure and quality
+- `scatter_plot` - Show relationship between experimental conditions and outcomes
+- `heatmap_plot` - Display correlation matrix of experimental variables
+
+This prompt will:
+- Use `data_info` to analyze data structure and handle missing values
+- Generate `scatter_plot` for condition-outcome relationships
+- Create `heatmap_plot` for correlation analysis
+- Generate publication-ready 300 DPI plots
+- Include proper statistical annotations
+
+<!-- **Output:** -->
+<!-- Add your output images here -->
+<!-- ![Data Quality Report](images/example5_data_quality.png) -->
+<!-- ![Experimental Conditions vs Outcomes](images/example5_experiment_scatter.png) -->
+<!-- ![Correlation Matrix Heatmap](images/example5_correlation_heatmap.png) -->
+
+### 6. Quick Data Quality Check
+```
+I need to quickly assess the quality of my dataset at /data/customer_data.csv - show me data completeness, distributions, and suggest the best visualization approaches.
+```
+
+**Tools called:**
+- `data_info` - Comprehensive data quality assessment
+
+This prompt will:
+- Use `data_info` to perform comprehensive data quality assessment
+- Identify missing values and data issues
+- Suggest optimal visualization strategies
+- Provide data cleaning recommendations
+
+<!-- **Output:** -->
+<!-- Add your output images here -->
+<!-- ![Data Quality Assessment](images/example6_data_quality.png) -->
+<!-- ![Data Completeness Report](images/example6_completeness_report.png) -->

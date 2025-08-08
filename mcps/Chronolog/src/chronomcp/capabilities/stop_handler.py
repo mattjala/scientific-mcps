@@ -2,6 +2,7 @@
 
 from chronomcp.utils import config
 
+
 async def stop_chronolog() -> str:
     """
     Release the story and disconnect from ChronoLog.
@@ -18,7 +19,7 @@ async def stop_chronolog() -> str:
         return f"Failed to disconnect from ChronoLog: {ret}"
 
     config._active_chronicle = None
-    config._active_story     = None
-    config._story_handle     = None
+    config._active_story = None
+    config._story_handle = None
 
     return "ChronoLog session stopped and disconnected"

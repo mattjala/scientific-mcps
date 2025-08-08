@@ -166,7 +166,6 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Adios run adios-mcp --help
 - `target_step` (int): Time step number to read from
 
 **Returns**: Variable data as Python scalar or list (flattened array) at the specified step.
-
 ## Examples
 
 ### 1. Scientific Data Structure Analysis

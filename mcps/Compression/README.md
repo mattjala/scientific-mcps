@@ -126,8 +126,7 @@ uv --directory=$env:CLONE_DIR\iowarp-mcps\mcps\Compression run compression-mcp -
 **Parameters**:
 - `file_path` (str): Absolute path to the file to compress
 
-**Returns**: Dictionary containing compression results with detailed statistics including original size, compressed size, compression ratio, and output file path.
-
+**Returns**: dict: Dictionary containing compression results with detailed statistics including original size, compressed size, compression ratio, and output file path.
 ## Examples
 
 ### 1. Log File Compression and Storage Optimization
