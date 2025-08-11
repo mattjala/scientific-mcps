@@ -1,6 +1,5 @@
 """Tests for Chronolog retrieve interaction capabilities."""
 import pytest
-import asyncio
 import sys
 import os
 import time

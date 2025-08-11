@@ -1,6 +1,5 @@
 """Tests for Chronolog stop session capabilities."""
 import pytest
-import asyncio
 import sys
 import os
 

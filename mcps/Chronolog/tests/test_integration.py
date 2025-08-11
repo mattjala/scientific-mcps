@@ -1,6 +1,5 @@
 """Integration tests for Chronolog MCP Server."""
 import pytest
-import asyncio
 import sys
 import os
 import time
