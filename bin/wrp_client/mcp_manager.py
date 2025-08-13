@@ -74,6 +74,7 @@ class WarpMCPManager(MCPManager):
         self.session: Optional[ClientSession] = None
         self.exit_stack = AsyncExitStack()
         self.tools: List[ToolDef] = []
+        self.conversation_history: List[dict] = []
 
     async def connect(self, server_script: str):
         print(f"Starting server with stdio: {server_script}" if self.verbose else "")
@@ -97,68 +98,90 @@ class WarpMCPManager(MCPManager):
             print(f" * {tool.name}: {tool.description}")
 
     async def process_query(self, query: str) -> str:
-        messages = [{"role": "user", "content": query}]
-        
+        # Add user query to conversation history
+        self.conversation_history.append({"role": "user", "content": query})
+        llm_reply = None
+
         try:
-            llm_reply = await self.llm.chat(messages, self.tools)
+            llm_reply = await self.llm.chat(self.conversation_history, self.tools)
+        
+        except Exception as e:
+            return f"Error during initial LLM processing: {e}"
+
+        if llm_reply.tool_calls:
+            tool_results = []
+            verbose_parts = []
             
-            if llm_reply.tool_calls:
-                tool_results = []
-                verbose_parts = []
+            for tool_call in llm_reply.tool_calls:
+                name, args = tool_call["name"], tool_call["args"]
+                if self.verbose:
+                    verbose_parts.append(f"[Calling tool {name} with args {args}]")
                 
-                for tool_call in llm_reply.tool_calls:
-                    name, args = tool_call["name"], tool_call["args"]
-                    if self.verbose:
-                        verbose_parts.append(f"[Calling tool {name} with args {args}]")
-                    
+                try:
+                    tr = await self.session.call_tool(name, args)
+                    raw_txt = tr.content[0].text if tr.content else "No content returned"
+
+                    is_error = False
                     try:
-                        tr = await self.session.call_tool(name, args)
-                        raw_txt = tr.content[0].text if tr.content else "No content returned"
+                        parsed = json.loads(raw_txt)
+                        if isinstance(parsed, dict) and (parsed.get("isError") or "error" in parsed):
+                            is_error = True
+                    except Exception:
+                        pass
 
-                        is_error = False
-                        try:
-                            parsed = json.loads(raw_txt)
-                            if isinstance(parsed, dict) and (parsed.get("isError") or "error" in parsed):
-                                is_error = True
-                        except Exception:
-                            pass
+                    if self.verbose:
+                        verbose_parts.append(f"[Called {name}: {raw_txt}]")
+                    
+                    if is_error:
+                        tool_results.append("Error: Incorrect filepath or argument passed.")
+                    else:
+                        tool_results.append(raw_txt)
 
-                        if self.verbose:
-                            verbose_parts.append(f"[Called {name}: {raw_txt}]")
-                        
-                        if is_error:
-                            tool_results.append("Error: Incorrect filepath or argument passed.")
-                        else:
-                            tool_results.append(raw_txt)
+                except Exception as e:
+                    error_msg = f"Error calling {name}: {e}"
+                    tool_results.append(error_msg)
+                    if self.verbose:
+                        verbose_parts.append(f"[{error_msg}]")
 
-                    except Exception as e:
-                        error_msg = f"Error calling {name}: {e}"
-                        tool_results.append(error_msg)
-                        if self.verbose:
-                            verbose_parts.append(f"[{error_msg}]")
+            # Combine all tool results for LLM processing
+            all_tool_results = "\n".join(tool_results)
+            
+            # Add tool call and results to conversation history
+            self.conversation_history.append({
+                "role": "assistant", 
+                "content": llm_reply.text,
+            })
+            self.conversation_history.append({
+                "role": "assistant",
+                "content": all_tool_results
+            })
+            
+            # Create a new message with the original query and tool results
+            followup_messages = [
+                {"role": "user", "content": f"Original query: {query}\n\nTool results: {all_tool_results}\n\nPlease provide a clear, natural language response to the original query based on these tool results."}
+            ]
 
-                # Combine all tool results for LLM processing
-                combined_results = "\n".join(tool_results)
-                
-                # Create a new message with the original query and tool results
-                followup_messages = [
-                    {"role": "user", "content": f"Original query: {query}\n\nTool results: {combined_results}\n\nPlease provide a clear, natural language response to the original query based on these tool results."}
-                ]
-                
+            final_reply = None
+
+            try:
                 # Get LLM to process the results into natural language (no tools needed)
                 final_reply = await self.llm.chat(followup_messages, [])
-                
-                if self.verbose:
-                    # Show verbose info first, then the natural language output
-                    verbose_output = "\n".join(verbose_parts)
-                    return f"{verbose_output}\nOutput: {final_reply.text}"
-                else:
-                    return f"Output: {final_reply.text}"
-            else:
-                return llm_reply.text
+            except Exception as e:
+                return f"Error during post-tool LLM processing: {e}"
 
-        except Exception as e:
-            return f"Error during LLM processing: {e}"
+            # Add final response to conversation history
+            self.conversation_history.append({"role": "assistant", "content": final_reply.text})
+            
+            if self.verbose:
+                # Show verbose info first, then the natural language output
+                verbose_output = "\n".join(verbose_parts)
+                return f"{verbose_output}\nOutput: {final_reply.text}"
+            else:
+                return f"Output: {final_reply.text}"
+        else:
+            # No tool calls - add assistant response to history
+            self.conversation_history.append({"role": "assistant", "content": llm_reply.text})
+            return llm_reply.text
 
     async def cleanup(self):
         await self.exit_stack.aclose()
