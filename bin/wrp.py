@@ -53,7 +53,7 @@ async def async_main():
     if not server_names:
         print("No MCP servers specified in the configuration file.", file=sys.stderr)
         sys.exit(1)
-        
+
     for server_name in server_names:
         # The manager can handle complex server configs if needed in the future
         if isinstance(server_name, dict):

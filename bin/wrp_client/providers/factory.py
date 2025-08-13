@@ -3,6 +3,7 @@ from .ollama import OllamaLLM
 from .openai import OpenAILLM
 from .claude import ClaudeLLM
 from .opencode import OpenCodeLLM
+from .claudecode import ClaudeCodeLLM
 
 PROVIDER_REGISTRY = {
     "gemini": GeminiLLM,
@@ -10,6 +11,7 @@ PROVIDER_REGISTRY = {
     "openai": OpenAILLM,
     "claude": ClaudeLLM,
     "opencode": OpenCodeLLM,
+    "claudecode": ClaudeCodeLLM,
 }
 
 def get_llm_adapter(provider_name: str, **kwargs):
